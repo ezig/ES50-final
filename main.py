@@ -86,6 +86,7 @@ def lift(level):
 	"""Given the level UP, DOWN, or WIPE, raises or lowers the pen
 	to the appropriate point based on the current lift position stored
 	in servoHeight"""
+	global servoHeight
 
 	if level == UP:
 		if servoHeight >= LEVELUP:
