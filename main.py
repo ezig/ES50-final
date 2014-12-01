@@ -20,7 +20,7 @@ LEVELUP = 2500
 LEVELWIPE = 1500
 
 # determines speed of the servo, higher is slower
-LIFTSPEED = 3000
+LIFTSPEED = 15000
 
 # Set pin numbering mode
 GPIO.setmode(GPIO.BOARD)
@@ -99,16 +99,13 @@ def lift(level):
 			while servoHeight >= LEVELUP:
 				servoHeight -= 1
 				writeMicroseconds(liftServo, servoHeight)
-				sleep(0.1)
-				print(servoHeight)
-				#delayMicroseconds(LIFTSPEED)
+				delayMicroseconds(LIFTSPEED)
 
 		else:
 			while servoHeight <= LEVELUP: 
 				servoHeight += 1
 				writeMicroseconds(liftServo, servoHeight)
-				sleep(0.1)
-				print(servoHeight)
+				delayMicroseconds(LIFTSPEED)
 
 	elif level == DOWN:
 		if servoHeight >= LEVELWRITE:
