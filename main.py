@@ -40,7 +40,7 @@ liftservo = GPIO.PWM(SERVOPINLIFT, 50)
 # currentY = TODO
 
 # Keeps track of the lift position of the pen
-servoLift = 500
+servoHeight = 500
 
 def wipe():
 	"""gets the eraser and then clears the board"""
@@ -85,45 +85,45 @@ def getDigits(temp):
 def lift(level):
 	"""Given the level UP, DOWN, or WIPE, raises or lowers the pen
 	to the appropriate point based on the current lift position stored
-	in servoLift"""
+	in servoHeight"""
 
 	if level == UP:
 		if servoHeight >= LEVELUP:
 			while servoHeight >= LEVELUP:
-				servoLift -= 1
-				lwriteMicroseconds(liftServo, servoLift)
+				servoHeight -= 1
+				lwriteMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
 		else:
-			while servoLift <= LEVELUP: 
-				servoLift += 1
-				writeMicroseconds(liftServo, servoLift)
+			while servoHeight <= LEVELUP: 
+				servoHeight += 1
+				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
 	elif level == DOWN:
 		if servoHeight >= LEVELDOWN:
 			while servoHeight >= LEVELDOWN:
-				servoLift -= 1
-				writeMicroseconds(liftServo, servoLift)
+				servoHeight -= 1
+				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
 		else:
-			while servoLift <= LEVELDOWN:
-				servoLift += 1
-				writeMicroseconds(liftServo, servoLift)
+			while servoHeight <= LEVELDOWN:
+				servoHeight += 1
+				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
 	elif level == WIPE:
 		if servoHeight >= WIPE:
 			while servoHeight >= LEVELWIPE:
-				servoLift -= 1
-				writeMicroseconds(liftServo, servoLift)
+				servoHeight -= 1
+				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
 		else:
-			while servoLift <= LEVELWIPE:
-				servoLift += 1
-				writeMicroseconds(liftServo, servoLift)
+			while servoHeight <= LEVELWIPE:
+				servoHeight += 1
+				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
 def setDestination(x, y):
