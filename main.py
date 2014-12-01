@@ -160,7 +160,7 @@ def goToXY(x, y):
 
 def writeMicroseconds(servo, microseconds):
 	"""Calculates duty cycle based on desired pulse width"""
-	servo.ChangeDutyCycle(microsends/200)
+	servo.ChangeDutyCycle(microseconds/200)
 
 def delayMicroseconds(microseconds):
 	"""Coverts microsecond delay to seconds delay"""
