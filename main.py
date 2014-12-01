@@ -108,14 +108,14 @@ def lift(level):
 				delayMicroseconds(LIFTSPEED)
 
 	elif level == DOWN:
-		if servoHeight >= LEVELDOWN:
-			while servoHeight >= LEVELDOWN:
+		if servoHeight >= LEVELWRITE:
+			while servoHeight >= LEVELWRITE:
 				servoHeight -= 1
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
 		else:
-			while servoHeight <= LEVELDOWN:
+			while servoHeight <= LEVELWRITE:
 				servoHeight += 1
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
