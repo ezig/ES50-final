@@ -15,8 +15,8 @@ DOWN = 1
 WIPE = 2
 
 # Positions for various leves of lifting
-LEVELWRITE = 1000
-LEVELUP = 2000
+LEVELWRITE = 500
+LEVELUP = 2500
 LEVELWIPE = 1500
 
 # determines speed of the servo, higher is slower
