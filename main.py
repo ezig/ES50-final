@@ -87,6 +87,12 @@ def lift(level):
 	to the appropriate point based on the current lift position stored
 	in servoHeight"""
 	global servoHeight
+	global UP
+	global LIFTSPEED
+	global LEVELUP
+	global LEVELWRITE
+	global LEVELWIPE
+	global liftServo
 
 	if level == UP:
 		if servoHeight >= LEVELUP:
