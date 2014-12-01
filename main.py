@@ -94,13 +94,13 @@ def lift(level):
 	global LEVELWIPE
 	global liftServo
 	liftServo.start(servoHeight/200)
-	print(servoHeight)
 	if level == UP:
 		if servoHeight >= LEVELUP:
 			while servoHeight >= LEVELUP:
 				servoHeight -= 1
 				writeMicroseconds(liftServo, servoHeight)
-				sleep(0.01)
+				sleep(0.1)
+				print(servoHeight)
 				#delayMicroseconds(LIFTSPEED)
 
 		else:
