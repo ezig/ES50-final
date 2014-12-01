@@ -31,9 +31,9 @@ GPIO.setup(SERVOPINRIGHT,GPIO.OUT)
 GPIO.setup(SERVOPINLIFT,GPIO.OUT)
 
 # Set up the pins for PWM at 50 HZ (meaning 20 ms periods)
-leftservo = GPIO.PWM(SERVOPINLEFT, 50)
-rightservo = GPIO.PWM(SERVOPINRIGHT, 50)
-liftservo = GPIO.PWM(SERVOPINLIFT, 50)
+leftServo = GPIO.PWM(SERVOPINLEFT, 50)
+rightServo = GPIO.PWM(SERVOPINRIGHT, 50)
+liftServo = GPIO.PWM(SERVOPINLIFT, 50)
 
 # keeps track of location of pen
 # currentX = TODO
