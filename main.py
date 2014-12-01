@@ -178,5 +178,8 @@ def delayMicroseconds(microseconds):
 
 for i in range(0,10):
 	lift(UP)
+	sleep(1)
 	lift(WIPE)
+	sleep(1)
 	lift(DOWN)
+	sleep(1)
