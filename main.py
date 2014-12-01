@@ -20,7 +20,7 @@ LEVELUP = 2500
 LEVELWIPE = 1500
 
 # determines speed of the servo, higher is slower
-LIFTSPEED = 15000
+LIFTSPEED = 100000
 
 # Set pin numbering mode
 GPIO.setmode(GPIO.BOARD)
