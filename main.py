@@ -36,8 +36,8 @@ rightservo = GPIO.PWM(SERVOPINRIGHT, 50)
 liftservo = GPIO.PWM(SERVOPINLIFT, 50)
 
 # keeps track of location of pen
-currentX = TODO
-currentY = TODO
+# currentX = TODO
+# currentY = TODO
 
 # Keeps track of the lift position of the pen
 servoLift = 500
@@ -135,7 +135,7 @@ def setDestination(x, y):
 
 	# use distance formula
 	distance = sqrt(dx*dx + dy*dy)
-	steps = TODO * distance #how many steps per unit?
+	# steps = TODO * distance #how many steps per unit?
 
 	# break the 
 	for i in range(0,steps):
@@ -148,7 +148,7 @@ def goToXY(x, y):
 	"""Given an x,y points, determines the current number of microseconds to
 	write to the left servo and the right servo"""
 
-	TODO
+	# TODO
 	#How to physics?
 
 def writeMicroseconds(servo, microseconds):
