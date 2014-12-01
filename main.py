@@ -15,9 +15,9 @@ DOWN = 1
 WIPE = 2
 
 # Positions for various leves of lifting
-LEVELWRITE = TODO
-LEVELUP = TODO
-LEVELWIPE = TODO
+LEVELWRITE = 1000
+LEVELUP = 2000
+LEVELWIPE = 1500
 
 # determines speed of the servo, higher is slower
 LIFTSPEED = 1500
@@ -40,7 +40,7 @@ currentX = TODO
 currentY = TODO
 
 # Keeps track of the lift position of the pen
-servoLift = TODO
+servoLift = 500
 
 def wipe():
 	"""gets the eraser and then clears the board"""
@@ -159,11 +159,16 @@ def delayMicroseconds(microseconds):
 	"""Coverts microsecond delay to seconds delay"""
 	sleep(microseconds/1000000)
 
-while (1):
-	weatherGetter = Weather()
-	temp = weatherGetter.getWeather()
-	digits = getDigist(temp)
-	print(digits)
-	for i in range(1,len(digits)):
-		drawNum(digits[i])
-	break;
+# while (1):
+# 	weatherGetter = Weather()
+# 	temp = weatherGetter.getWeather()
+# 	digits = getDigist(temp)
+# 	print(digits)
+# 	for i in range(1,len(digits)):
+# 		drawNum(digits[i])
+# 	break;
+
+for i in range(0,10):
+	lift(UP)
+	lift(WIPE)
+	lift(DOWN)
