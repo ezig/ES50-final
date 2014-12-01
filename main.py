@@ -93,12 +93,12 @@ def lift(level):
 	global LEVELWRITE
 	global LEVELWIPE
 	global liftServo
-
+	liftServo.start(servoHeight/200)
 	if level == UP:
 		if servoHeight >= LEVELUP:
 			while servoHeight >= LEVELUP:
 				servoHeight -= 1
-				lwriteMicroseconds(liftServo, servoHeight)
+				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
 		else:
@@ -133,6 +133,7 @@ def lift(level):
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
+	servo.stop()
 def setDestination(x, y):
 	"""Given a destination x,y, calls goToXY in a loop so that a straight
 	is drawn between currentX, currentY and the destination"""
