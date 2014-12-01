@@ -94,6 +94,7 @@ def lift(level):
 	global LEVELWIPE
 	global liftServo
 	liftServo.start(servoHeight/200)
+	print(servoHeight)
 	if level == UP:
 		if servoHeight >= LEVELUP:
 			while servoHeight >= LEVELUP:
