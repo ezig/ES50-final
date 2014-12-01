@@ -133,7 +133,7 @@ def lift(level):
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
-	servo.stop()
+	liftServo.stop()
 def setDestination(x, y):
 	"""Given a destination x,y, calls goToXY in a loop so that a straight
 	is drawn between currentX, currentY and the destination"""
