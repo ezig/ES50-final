@@ -57,7 +57,7 @@ LEVELRIGHT1B = TODO
 def wipe():
 	"""gets the eraser and then clears the board"""
 
-		lift(UP)
+	lift(UP)
 
 # given a number as a string (or a decimal point)
 def drawNum(num):
@@ -110,48 +110,48 @@ def getDigits(temp):
 	representing the digits (and the decimal point)"""
 
 	return list(str(temp))
-# While the pen is up, move the right servo to the correct starting angle, defined by LEVELRIGHT1a
-def rightadjust(num):
-    if num == 1
-        if servoRight > LEVELRIGHT1A
-            while servoRight > LEVELRIGHT1A
-                servoRight -= 1
-                lwriteMicrosceonds(rightServo, servoRight)
-                delayMicroseconds(LIFTSPEED)
-        else if servoRight < LEVELRIGHT1A
-            while servoRight > LEVELRIGHT1a
-                servoRight += 1
-                lwriteMicroseconds(rightServo, servoRight)
-                delayMicroseconds(LIFTSPEED)
+# # While the pen is up, move the right servo to the correct starting angle, defined by LEVELRIGHT1a
+# def rightadjust(num):
+#     if num == 1
+#         if servoRight > LEVELRIGHT1A
+#             while servoRight > LEVELRIGHT1A
+#                 servoRight -= 1
+#                 lwriteMicrosceonds(rightServo, servoRight)
+#                 delayMicroseconds(LIFTSPEED)
+#         else if servoRight < LEVELRIGHT1A
+#             while servoRight > LEVELRIGHT1a
+#                 servoRight += 1
+#                 lwriteMicroseconds(rightServo, servoRight)
+#                 delayMicroseconds(LIFTSPEED)
 
-# After the pen is down, the right servo must move counterclockwise (the angle from the Raspberry Pi perspective is decreasing)
-def rightwrite(num):
-    if num == 1
-        while servoRight > LEVELRIGHT1B
-            servoRight -= 1
-            lwriteMicroseconds(rightServo, servoRight)
-            delayMicroseconds(LIFTSPEED)
+# # After the pen is down, the right servo must move counterclockwise (the angle from the Raspberry Pi perspective is decreasing)
+# def rightwrite(num):
+#     if num == 1
+#         while servoRight > LEVELRIGHT1B
+#             servoRight -= 1
+#             lwriteMicroseconds(rightServo, servoRight)
+#             delayMicroseconds(LIFTSPEED)
 
-# Move Left servo to the correct starting angle, defined by LEVELRIGHT1a
-def leftadjust(num):
-    if num == 1
-        if servoLeft > LEVELLEFT1a
-            while servoLeft > LEVELLEFT1a
-                servoLeft -= 1
-                    lwriteMicrosceonds(leftServo, servoLeft)
-                    delayMicroseconds(LIFTSPEED)
-        else if servoLeft < LEVELLEFT1a
-            while servoLeft > LEVELLEFT1a
-                servoLeft += 1
-                lwriteMicroseconds(leftServo, servoLeft)
-                delayMicroseconds(LIFTSPEED)
-# When the pen is down, the left servo must move clockwise (Raspberry Pi thinks the angle is increasing)
-def leftwrite(num):
-    if num == 1
-        while servoLeft < LEVELLEFT1b
-            servoLeft += 1
-                lwriteMicroseconds(leftServo, servoLeft)
-                delayMicroseconds(LIFTSPEED)
+# # Move Left servo to the correct starting angle, defined by LEVELRIGHT1a
+# def leftadjust(num):
+#     if num == 1
+#         if servoLeft > LEVELLEFT1a
+#             while servoLeft > LEVELLEFT1a
+#                 servoLeft -= 1
+#                     lwriteMicrosceonds(leftServo, servoLeft)
+#                     delayMicroseconds(LIFTSPEED)
+#         else if servoLeft < LEVELLEFT1a
+#             while servoLeft > LEVELLEFT1a
+#                 servoLeft += 1
+#                 lwriteMicroseconds(leftServo, servoLeft)
+#                 delayMicroseconds(LIFTSPEED)
+# # When the pen is down, the left servo must move clockwise (Raspberry Pi thinks the angle is increasing)
+# def leftwrite(num):
+#     if num == 1
+#         while servoLeft < LEVELLEFT1b
+#             servoLeft += 1
+#                 lwriteMicroseconds(leftServo, servoLeft)
+#                 delayMicroseconds(LIFTSPEED)
 
 def lift(level):
 	"""Given the level UP, DOWN, or WIPE, raises or lowers the pen
