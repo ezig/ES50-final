@@ -15,12 +15,14 @@ DOWN = 1
 WIPE = 2
 
 # Positions for various leves of lifting
-LEVELWRITE = 500
-LEVELUP = 2500
-LEVELWIPE = 1500
+LEVELWRITE = 750
+LEVELUP = 1750
+LEVELWIPE = 1250
 
 # determines speed of the servo, higher is slower
 LIFTSPEED = 1500
+
+GPIO.cleanup()
 
 # Set pin numbering mode
 GPIO.setmode(GPIO.BOARD)
@@ -44,15 +46,15 @@ servoHeight = 500
 
 # For each number, there is a set of angles that needs to be reached by the left and right servos
 # Point A would be at the top of zero and point B would be at the bottom of zero; it would write out 0 in a counter clockwise fashion
-LEVELLEFT0A = TODO
-LEVELRIGHT0A = TODO
-LEvELLEFT0B = TODO
-LEVELLEFT0B = TODO
+#LEVELLEFT0A = TODO
+#LEVELRIGHT0A = TODO
+#LEvELLEFT0B = TODO
+#LEVELLEFT0B = TODO
 # Point A would be at the bottom of 1 and point B would be at the top of 1; 1 would be written as a straight line
-LEVELLEFT1A = TODO
-LEVELRIGHT1A = TODO
-LEVELLEFT1B = TODO
-LEVELRIGHT1B = TODO
+#LEVELLEFT1A = TODO
+#LEVELRIGHT1A = TODO
+#LEVELLEFT1B = TODO
+#LEVELRIGHT1B = TODO
 
 def wipe():
 	"""gets the eraser and then clears the board"""
@@ -157,11 +159,10 @@ def lift(level):
 	"""Given the level UP, DOWN, or WIPE, raises or lowers the pen
 	to the appropriate point based on the current lift position stored
 	in servoHeight"""
-	global servoHeight, UP, DOWN, WIPE LIFTSPEED, LEVELUP, LEVELWRITE, LEVELWIPE, liftServo
+	global servoHeight, UP, DOWN, WIPE, LIFTSPEED, LEVELUP, LEVELWRITE, LEVELWIPE, liftServo
 
 	#start the servo at the current position
 	# (microseconds / 1000 / 20 ms  * 100% = duty cycle)
-	liftServo.start(servoHeight/200.0)
 
 	if level == UP:
 		if servoHeight >= LEVELUP:
@@ -202,7 +203,7 @@ def lift(level):
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
 
-	liftServo.stop()
+	#liftServo.stop()
 
 def linePath(x, y):
 	"""Given a destination x,y, calls goToXY in a loop so that a straight
@@ -227,7 +228,7 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 
 	if direction == 'Clockwise':
 		increment = -0.05 # how far to go each step 
-	elif direction == 'Counterclockwise'
+	elif direction == 'Counterclockwise':
 		increment = 0.05
 
 	while startAngle + sweptAngle < endAngle:
@@ -261,7 +262,8 @@ def delayMicroseconds(microseconds):
 # 	break;
 
 #test code
-for i in range(0,10):
+for i in range(0,1):
+	liftServo.start(500/200.0)
 	lift(UP)
 	sleep(1)
 	lift(WIPE)
