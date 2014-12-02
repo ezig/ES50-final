@@ -1,4 +1,3 @@
-
 from weather import *
 from time import sleep
 import RPi.GPIO as GPIO
@@ -16,32 +15,12 @@ DOWN = 1
 WIPE = 2
 
 # Positions for various leves of lifting
-<<<<<<< Updated upstream
 LEVELWRITE = 500
 LEVELUP = 2500
 LEVELWIPE = 1500
-=======
-
-LEVELWRITE = 500
-LEVELUP = 2500
-LEVELWIPE = 1500
-# For each number, there is a set of angles that needs to be reached by the left and right servos
-# Point A would be at the top of zero and point B would be at the bottom of zero; it would write out 0 in a counter clockwise fashion
-LEVELLEFT0A = TODO
-LEVELRIGHT0A = TODO
-LEvELLEFT0B = TODO
-LEVELLEFT0B = TODO
-# Point A would be at the bottom of 1 and point B would be at the top of 1; 1 would be written as a straight line
-LEVELLEFT1A = TODO
-LEVELRIGHT1A = TODO
-LEVELLEFT1B = TODO
-LEVELRIGHT1B = TODO
-
-
->>>>>>> Stashed changes
 
 # determines speed of the servo, higher is slower
-LIFTSPEED = 100000
+LIFTSPEED = 1500
 
 # Set pin numbering mode
 GPIO.setmode(GPIO.BOARD)
@@ -62,19 +41,23 @@ liftServo = GPIO.PWM(SERVOPINLIFT, 50)
 
 # Keeps track of the lift position of the pen
 servoHeight = 500
-<<<<<<< Updated upstream
-=======
-# Keeps track of the position of the right servo
-servoRight = TODO
-# Keeps track of the position of the left servo
-servoLeft = TODO
->>>>>>> Stashed changes
+
+# For each number, there is a set of angles that needs to be reached by the left and right servos
+# Point A would be at the top of zero and point B would be at the bottom of zero; it would write out 0 in a counter clockwise fashion
+LEVELLEFT0A = TODO
+LEVELRIGHT0A = TODO
+LEvELLEFT0B = TODO
+LEVELLEFT0B = TODO
+# Point A would be at the bottom of 1 and point B would be at the top of 1; 1 would be written as a straight line
+LEVELLEFT1A = TODO
+LEVELRIGHT1A = TODO
+LEVELLEFT1B = TODO
+LEVELRIGHT1B = TODO
 
 def wipe():
 	"""gets the eraser and then clears the board"""
 
-	lift(WIPE)
-	TODO
+		lift(UP)
 
 # given a number as a string (or a decimal point)
 def drawNum(num):
@@ -128,7 +111,7 @@ def getDigits(temp):
 
 	return list(str(temp))
 # While the pen is up, move the right servo to the correct starting angle, defined by LEVELRIGHT1a
-def rightadjust(num)
+def rightadjust(num):
     if num == 1
         if servoRight > LEVELRIGHT1A
             while servoRight > LEVELRIGHT1A
@@ -142,7 +125,7 @@ def rightadjust(num)
                 delayMicroseconds(LIFTSPEED)
 
 # After the pen is down, the right servo must move counterclockwise (the angle from the Raspberry Pi perspective is decreasing)
-def rightwrite(num)
+def rightwrite(num):
     if num == 1
         while servoRight > LEVELRIGHT1B
             servoRight -= 1
@@ -150,7 +133,7 @@ def rightwrite(num)
             delayMicroseconds(LIFTSPEED)
 
 # Move Left servo to the correct starting angle, defined by LEVELRIGHT1a
-def leftadjust(num)
+def leftadjust(num):
     if num == 1
         if servoLeft > LEVELLEFT1a
             while servoLeft > LEVELLEFT1a
@@ -163,26 +146,23 @@ def leftadjust(num)
                 lwriteMicroseconds(leftServo, servoLeft)
                 delayMicroseconds(LIFTSPEED)
 # When the pen is down, the left servo must move clockwise (Raspberry Pi thinks the angle is increasing)
-def leftwrite(num)
+def leftwrite(num):
     if num == 1
         while servoLeft < LEVELLEFT1b
             servoLeft += 1
                 lwriteMicroseconds(leftServo, servoLeft)
                 delayMicroseconds(LIFTSPEED)
 
-
 def lift(level):
 	"""Given the level UP, DOWN, or WIPE, raises or lowers the pen
 	to the appropriate point based on the current lift position stored
 	in servoHeight"""
-	global servoHeight
-	global UP
-	global LIFTSPEED
-	global LEVELUP
-	global LEVELWRITE
-	global LEVELWIPE
-	global liftServo
-	liftServo.start(servoHeight/200)
+	global servoHeight, UP, DOWN, WIPE LIFTSPEED, LEVELUP, LEVELWRITE, LEVELWIPE, liftServo
+
+	#start the servo at the current position
+	# (microseconds / 1000 / 20 ms  * 100% = duty cycle)
+	liftServo.start(servoHeight/200.0)
+
 	if level == UP:
 		if servoHeight >= LEVELUP:
 			while servoHeight >= LEVELUP:
@@ -215,6 +195,7 @@ def lift(level):
 				servoHeight -= 1
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
+
 		else:
 			while servoHeight <= LEVELWIPE:
 				servoHeight += 1
@@ -222,9 +203,11 @@ def lift(level):
 				delayMicroseconds(LIFTSPEED)
 
 	liftServo.stop()
-def setDestination(x, y):
+
+def linePath(x, y):
 	"""Given a destination x,y, calls goToXY in a loop so that a straight
 	is drawn between currentX, currentY and the destination"""
+	global currentX, currentY
 
 	dx = x - currentX
 	dy = y - currentY
@@ -239,6 +222,19 @@ def setDestination(x, y):
 		currentX += dx/steps
 		currentY += dy/steps
 
+def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
+	sweptAngle = 0
+
+	if direction == 'Clockwise':
+		increment = -0.05 # how far to go each step 
+	elif direction == 'Counterclockwise'
+		increment = 0.05
+
+	while startAngle + sweptAngle < endAngle:
+		linePath(centerX + radius * cos(startAngle + sweptAngle), 
+			centerY + radius * sin(startAngle + sweptAngle))
+		sweptAngle += increment
+
 
 def goToXY(x, y):
 	"""Given an x,y points, determines the current number of microseconds to
@@ -247,12 +243,13 @@ def goToXY(x, y):
 	# TODO
 	#How to physics?
 
+def writeMicroseconds(servo, microseconds):
 	"""Calculates duty cycle based on desired pulse width"""
-	servo.ChangeDutyCycle(microseconds/200)
+	servo.ChangeDutyCycle(microseconds/200.0)
 
 def delayMicroseconds(microseconds):
-	"""Converts microsecond delay to seconds delay"""
-	sleep(microseconds/1000000)
+	"""Coverts microsecond delay to seconds delay"""
+	sleep(microseconds/1000000.0)
 
 # while (1):
 # 	weatherGetter = Weather()
@@ -263,15 +260,13 @@ def delayMicroseconds(microseconds):
 # 		drawNum(digits[i])
 # 	break;
 
+#test code
 for i in range(0,10):
 	lift(UP)
 	sleep(1)
 	lift(WIPE)
 	sleep(1)
 	lift(DOWN)
-<<<<<<< Updated upstream
 	sleep(1)
-=======
-	sleep(1)
->>>>>>> FETCH_HEAD
->>>>>>> Stashed changes
+
+GPIO.cleanup()
