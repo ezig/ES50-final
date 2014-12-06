@@ -257,8 +257,8 @@ def goToXY (x, y):
 	global currentX, currentY, leftMicroseconds, rightMicroseconds, LEFTSERVONULL, RIGHTSERVONULL, leftServo, rightServo, p, linePath
 
 
-	a = (leftMicroseconds - LEFTSERVONULL) / 1000.0 * 90.0
-	b = (rightMicroseconds - RIGHTSERVONULL) / 1000.0 * 90.0 
+	a = (leftMicroseconds - LEFTSERVONULL) / 1000.0 * pi / 2
+	b = (rightMicroseconds - RIGHTSERVONULL) / 1000.0 * pi / 2 
  	# Define the x and y distance the robot arms must travel
  	dx = x - currentX
  	dy = y - currentY
@@ -299,8 +299,8 @@ def goToXY (x, y):
  	newleft = t1 + ang1 - leftf
  	newright = t2 + ang2 - rightf
 
- 	leftMicroseconds = LEFTSERVONULL + 1000 * newleft/90.0
- 	rightMicroseconds = RIGHTSERVONULL +1000 * newright/90.0 
+ 	leftMicroseconds = LEFTSERVONULL + 1000 * newleft/(pi/2)
+ 	rightMicroseconds = RIGHTSERVONULL +1000 * newright/(pi/2)
 
  	writeMicroseconds(leftServo, leftMicroseconds)
  	writeMicroseconds(rightServo, rightMicroseconds)
