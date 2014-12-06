@@ -240,7 +240,7 @@ def linePath(x, y):
 	dy = y - currentY
 
 	# use distance formula
-	steps = floor(4 * sqrt(dx*dx + dy*dy))
+	steps = int(floor(4 * sqrt(dx*dx + dy*dy)))
 	#steps = int(4 * distance) #how many steps per unit?
 
 	# break the 
