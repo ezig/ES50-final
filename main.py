@@ -290,6 +290,7 @@ def goToXY (x, y):
  	# ang2 is the angle between vectors L3 and L4
  	# Defined using Law of Cosines, we could alternatively use the dot product.
  	ang1 = acos((L1**2 + L2**2 - c**2) / (2*L1dotL2))
+ 	print((L3**2 + L4**2 - c**2) / (2*L3dotL4))
  	ang2 = acos((L3**2 + L4**2 - c**2) / (2*L3dotL4))
 
  	# leftf is the angle between p on the left and L2, rightf is the angle between p on the right and L3.
