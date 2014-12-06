@@ -19,9 +19,13 @@ LEVELWRITE = 1500
 LEVELUP = 2000
 LEVELWIPE = 1750
 
-LEFTSERVONULL = 500
-RIGHTSERVONULL = 2500
+#LEFTSERVONULL = 500
+#RIGHTSERVONULL = 2500
 
+SERVOFAKTOR = 620
+
+LEFTSERVONULL = 1900
+RIGHTSERVONULL = 984
 # determines speed of the servo, higher is slower
 LIFTSPEED = 1500
 
@@ -46,6 +50,18 @@ currentY = 45
 
 p = 37
 l = 47
+
+# length of arms
+L1 = 37
+L2 = 47
+L3 = 13.2
+
+
+# origin points of left and right servo 
+O1X = 22
+O1Y = -25
+O2X = 47
+O2Y = -25
 
 # keeps track of left right servo position
 leftMicroseconds = 1500
@@ -247,73 +263,108 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 			centerY + radius * sin(startAngle + sweptAngle))
 		sweptAngle += increment
 
-def goToXY (x, y):
+# def goToXY (x, y):
 	 
-	"""Assumes global variables p (length of lower robot arm segment) and l (length of upper robot arm segment) and currentX and currentY.
-	Takes in x, y coordinates of new destination with origin at the right servo.
-	Takes in a, b which are exterior angles of the servo -- a is negative from the horizontal, b is positive from the horizontal.
-	Returns the new angles of the servos. (Should newleft be negative of what it is now? Test and see.)
-	"""
-	global currentX, currentY, leftMicroseconds, rightMicroseconds, LEFTSERVONULL, RIGHTSERVONULL, leftServo, rightServo, p, linePath
+# 	"""Assumes global variables p (length of lower robot arm segment) and l (length of upper robot arm segment) and currentX and currentY.
+# 	Takes in x, y coordinates of new destination with origin at the right servo.
+# 	Takes in a, b which are exterior angles of the servo -- a is negative from the horizontal, b is positive from the horizontal.
+# 	Returns the new angles of the servos. (Should newleft be negative of what it is now? Test and see.)
+# 	"""
+# 	global currentX, currentY, leftMicroseconds, rightMicroseconds, LEFTSERVONULL, RIGHTSERVONULL, leftServo, rightServo, p, linePath
 
 
-	a = (leftMicroseconds - LEFTSERVONULL) / 1000.0 * pi / 2
-	b = (rightMicroseconds - RIGHTSERVONULL) / 1000.0 * pi / 2 
- 	# Define the x and y distance the robot arms must travel
- 	dx = x - currentX
- 	dy = y - currentY
+# 	a = (leftMicroseconds - LEFTSERVONULL) / 1000.0 * pi / 2
+# 	b = (rightMicroseconds - RIGHTSERVONULL) / 1000.0 * pi / 2 
+#  	# Define the x and y distance the robot arms must travel
+#  	dx = x - currentX
+#  	dy = y - currentY
 
- 	# If you consider l and p as vectors, the vector L1 would be their sum (a.k.a. the shortest path from the position of the left servo to point (currentX, currentY)). 
- 	# The length L1 is defined using the Law of Cosines. It is defined as a length because Python hates vectors. 
- 	L1 = sqrt(l**2 + p**2 - 2*l*p*cos(pi/2 + a))
- 	# t1 is the angle between L1 and the horizontal. 
- 	# Defined by using the fact that L1*sin(t1) = currentY.
- 	t1 = asin(currentY / L1)
- 	# c is the length of the vector that takes you from the old point (currentX, currentY) to the new point (x,y).
- 	c = sqrt(dx**2 + dy**2)
- 	# L2 is the length of the shortest path between the position of the left servo and the new point (x,y).
- 	# Defined as the length of the vector sum of vectors L1 and c.
- 	L2 = sqrt((L1*cos(t1) + dx)**2 + (L1*sin(t1) + dy)**2)
+#  	# If you consider l and p as vectors, the vector L1 would be their sum (a.k.a. the shortest path from the position of the left servo to point (currentX, currentY)). 
+#  	# The length L1 is defined using the Law of Cosines. It is defined as a length because Python hates vectors. 
+#  	L1 = sqrt(l**2 + p**2 - 2*l*p*cos(pi/2 + a))
+#  	# t1 is the angle between L1 and the horizontal. 
+#  	# Defined by using the fact that L1*sin(t1) = currentY.
+#  	t1 = asin(currentY / L1)
+#  	# c is the length of the vector that takes you from the old point (currentX, currentY) to the new point (x,y).
+#  	c = sqrt(dx**2 + dy**2)
+#  	# L2 is the length of the shortest path between the position of the left servo and the new point (x,y).
+#  	# Defined as the length of the vector sum of vectors L1 and c.
+#  	L2 = sqrt((L1*cos(t1) + dx)**2 + (L1*sin(t1) + dy)**2)
  	
- 	#L3 is the right side equivalent of L1
- 	L3 = sqrt(l**2 + p**2 - 2*l*p*cos(pi/2 + b))
- 	# Right side equivalent of t1
- 	t2 = asin(currentY / L2)
- 	# Right side equivalent of L2
- 	L4 = sqrt((L3*cos(t2) + dx)**2 + (L3*sin(t2) + dy)**2)
+#  	#L3 is the right side equivalent of L1
+#  	L3 = sqrt(l**2 + p**2 - 2*l*p*cos(pi/2 + b))
+#  	# Right side equivalent of t1
+#  	t2 = asin(currentY / L2)
+#  	# Right side equivalent of L2
+#  	L4 = sqrt((L3*cos(t2) + dx)**2 + (L3*sin(t2) + dy)**2)
 
-	# Because Python hates vectors, we have hard-coded the dot products that we are going to use.
-	L1dotL2 = (L1*cos(t1))*(L1*cos(t1) + dx) + (L1*sin(t1))*(L1*sin(t1) + dy)
-	L3dotL4 = L3*cos(t2)*(L3*cos(t2) + dx) + (L3*sin(t2))*(L3*sin(t2) + dy)
+# 	# Because Python hates vectors, we have hard-coded the dot products that we are going to use.
+# 	L1dotL2 = (L1*cos(t1))*(L1*cos(t1) + dx) + (L1*sin(t1))*(L1*sin(t1) + dy)
+# 	L3dotL4 = L3*cos(t2)*(L3*cos(t2) + dx) + (L3*sin(t2))*(L3*sin(t2) + dy)
 
- 	# ang1 is the angle between vectors L1 and L2
- 	# ang2 is the angle between vectors L3 and L4
- 	# Defined using Law of Cosines, we could alternatively use the dot product.
- 	val1 = (L1**2 + L2**2 - c**2) / (2*L1dotL2)
- 	if val1 > 1.0:
- 		ang1 = 0
- 	else:
- 		ang1 = acos((L1**2 + L2**2 - c**2) / (2*L1dotL2))
+#  	# ang1 is the angle between vectors L1 and L2
+#  	# ang2 is the angle between vectors L3 and L4
+#  	# Defined using Law of Cosines, we could alternatively use the dot product.
+#  	val1 = (L1**2 + L2**2 - c**2) / (2*L1dotL2)
+#  	if val1 > 1.0:
+#  		ang1 = 0
+#  	else:
+#  		ang1 = acos((L1**2 + L2**2 - c**2) / (2*L1dotL2))
  	
- 	val2 = (L3**2 + L4**2 - c**2) / (2*L3dotL4)
- 	if val2 > 1.0:
- 		ang2 = 0
- 	else:
-		ang2 = acos((L3**2 + L4**2 - c**2) / (2*L3dotL4))
+#  	val2 = (L3**2 + L4**2 - c**2) / (2*L3dotL4)
+#  	if val2 > 1.0:
+#  		ang2 = 0
+#  	else:
+# 		ang2 = acos((L3**2 + L4**2 - c**2) / (2*L3dotL4))
 
- 	# leftf is the angle between p on the left and L2, rightf is the angle between p on the right and L3.
- 	leftf = acos((p**2 + L2**2 - l**2) / (2*p*L2))
- 	rightf = acos((p**2 + L4**2 - l**2) / (2*p*L4))
+#  	# leftf is the angle between p on the left and L2, rightf is the angle between p on the right and L3.
+#  	leftf = acos((p**2 + L2**2 - l**2) / (2*p*L2))
+#  	rightf = acos((p**2 + L4**2 - l**2) / (2*p*L4))
 
- 	newleft = t1 + ang1 - leftf
- 	newright = t2 + ang2 - rightf
+#  	newleft = t1 + ang1 - leftf
+#  	newright = t2 + ang2 - rightf
 
- 	leftMicroseconds = LEFTSERVONULL + 1000 * newleft/(pi/2)
- 	rightMicroseconds = RIGHTSERVONULL +1000 * newright/(pi/2)
+#  	leftMicroseconds = LEFTSERVONULL + 1000 * newleft/(pi/2)
+#  	rightMicroseconds = RIGHTSERVONULL +1000 * newright/(pi/2)
 
- 	writeMicroseconds(leftServo, leftMicroseconds)
- 	writeMicroseconds(rightServo, rightMicroseconds)
+#  	writeMicroseconds(leftServo, leftMicroseconds)
+#  	writeMicroseconds(rightServo, rightMicroseconds)
 
+def return_angle(a, b, c):
+ 	#cosine rule for angle between c and a
+ 	return acos((a * a + c * c - b * b) / (2 * a * c))
+
+def goToXY(Tx, Ty):
+ 	delayMicroseconds(1000)
+
+ 	global O1X, O1Y, L1, L2, L3, rightServo, leftServo, LEFTSERVONULL, RIGHTSERVONULL 
+
+	#calculate triangle between pen, servoLeft and arm joint
+  	# cartesian dx/dy
+	dx = Tx - O1X
+	dy = Ty - O1Y
+
+    #polar lemgth (c) and angle (a1)
+	c = sqrt(dx * dx + dy * dy) 
+	a1 = atan2(dy, dx)
+	a2 = return_angle(L1, L2, c)
+
+	writeMicroseconds(servoLeft, floor(((a2 + a1 - pi) * SERVOFAKTOR) + LEFTSERVONULL))
+
+	#calculate joinr arm point for triangle of the right servo arm
+	a2 = return_angle(L2, L1, c);
+	Hx = Tx + L3 * cos((a1 - a2 + 0.621) + pi) #36,5
+	Hy = Ty + L3 * sin((a1 - a2 + 0.621) + pi)
+
+	#calculate triangle between pen joint, servoRight and arm joint
+	dx = Hx - O2X
+	dy = Hy - O2Y
+
+	c = sqrt(dx * dx + dy * dy)
+	a1 = atan2(dy, dx)
+	a2 = return_angle(L1, (L2 - L3), c)
+
+	writeMicroseconds(rightServo, floor(((a1 - a2) * SERVOFAKTOR) + RIGHTSERVONULL))
 
 def writeMicroseconds(servo, microseconds):
 	"""Calculates duty cycle based on desired pulse width"""
@@ -323,6 +374,11 @@ def delayMicroseconds(microseconds):
 	"""Coverts microsecond delay to seconds delay"""
 	sleep(microseconds/1000000.0)
 
+def calibrate():
+	drawTo(-3, 29.2)
+  	sleep(0.5)
+  	linePath(74.1, 28)
+  	sleep(0.5)
 # while (1):
 # 	weatherGetter = Weather()
 # 	temp = weatherGetter.getWeather()
@@ -343,7 +399,7 @@ def delayMicroseconds(microseconds):
 # 	sleep(1)
 leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
-linePath(50,50)
+calibrate()
 leftServo.stop()
 rightServo.stop()
 
