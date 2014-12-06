@@ -479,8 +479,8 @@ linePath(5, 5);
 #calibrate()
 
 drawNum(5, 25, 0)
-drawNum(19,25, 1)
-drawNum(19,25,2)
+# drawNum(19,25, 1)
+# drawNum(19,25,2)
 
 """for i in range (0, 1000):
 	writeMicroseconds(leftServo, 1500-i)
