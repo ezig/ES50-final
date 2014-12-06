@@ -38,8 +38,8 @@ rightServo = GPIO.PWM(SERVOPINRIGHT, 50)
 liftServo = GPIO.PWM(SERVOPINLIFT, 50)
 
 # keeps track of location of pen
-# currentX = TODO
-# currentY = TODO
+currentX = 0
+currentY = 0
 
 # Keeps track of the lift position of the pen
 servoHeight = 500
@@ -222,6 +222,8 @@ def linePath(x, y):
 		goToXY(currentX+dx/steps,currentY+dy/steps)
 		currentX += dx/steps
 		currentY += dy/steps
+		print(currentX)
+		current(Y)
 
 def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 	sweptAngle = 0
@@ -237,12 +239,58 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 		sweptAngle += increment
 
 
-def goToXY(x, y):
-	"""Given an x,y points, determines the current number of microseconds to
-	write to the left servo and the right servo"""
+p = 37 mm
+ l = 47 mm
 
-	# TODO
-	#How to physics?
+ def goToXY (x, y, a, b):
+	 	'''
+	Assumes global variables p (length of lower robot arm segment) and l (length of upper robot arm segment) and currentX and currentY.
+	Takes in x, y coordinates of new destination with origin at the right servo.
+	Takes in a, b which are exterior angles of the servo -- a is negative from the horizontal, b is positive from the horizontal.
+	Returns the new angles of the servos. (Should newleft be negative of what it is now? Test and see.)
+	'''
+
+ 	# Define the x and y distance the robot arms must travel
+ 	dx = x - currentX
+ 	dy = y - currentY
+
+ 	# If you consider l and p as vectors, the vector L1 would be their sum (a.k.a. the shortest path from the position of the left servo to point (currentX, currentY)). 
+ 	# The length L1 is defined using the Law of Cosines. It is defined as a length because Python hates vectors. 
+ 	L1 = sqrt(l**2 + p**2 - 2*l*p*cos(pi/2 + a))
+ 	# t1 is the angle between L1 and the horizontal. 
+ 	# Defined by using the fact that L1*sin(t1) = currentY.
+ 	t1 = asin(currentY / L1)
+ 	# c is the length of the vector that takes you from the old point (currentX, currentY) to the new point (x,y).
+ 	c = sqrt(dx**2 + dy**2)
+ 	# L2 is the length of the shortest path between the position of the left servo and the new point (x,y).
+ 	# Defined as the length of the vector sum of vectors L1 and c.
+ 	L2 = sqrt((L1*cos(t1) + dx)**2 + (L1*sin(t1) + dy)**2)
+ 	
+ 	#L3 is the right side equivalent of L1
+ 	L3 = sqrt(l**2 + p**2 - 2*l*p*cos(pi/2 + b))
+ 	# Right side equivalent of t1
+ 	t2 = asin(currentY / L2)
+ 	# Right side equivalent of L2
+ 	L4 = sqrt((L3*cos(t2) + dx)**2 + (L3*sin(t2) + dy)**2)
+
+	# Because Python hates vectors, we have hard-coded the dot products that we are going to use.
+	L1dotL2 = (L1*cos(t1))*(L1*cos(t1) + dx) + (L1*sin(t1))*(L1*sin(t1) + dy)
+	L3dotL4 = L3*cos(t2))*(L3*cos(t2) + dx) + (L3*sin(t2))*(L3*sin(t2) + dy)
+
+ 	# ang1 is the angle between vectors L1 and L2
+ 	# ang2 is the angle between vectors L3 and L4
+ 	# Defined using Law of Cosines, we could alternatively use the dot product.
+ 	ang1 = acos((L1**2 + L2**2 - c**2) / (2*L1dotL2))
+ 	ang2 = acos((L3**2 + L4**2 - c**2) / (2*L3dotL4))
+
+ 	# leftf is the angle between p on the left and L2, rightf is the angle between p on the right and L3.
+ 	leftf = acos((p**2 + L2**2 - l**2) / (2*p*L2))
+ 	rightf = acos((p**2 + L4**2 - l**2) / (2*p*L4))
+
+ 	newleft = t1 + ang1 - leftf
+ 	newright = t2 + ang2 - rightf
+
+return newleft, newright
 
 def writeMicroseconds(servo, microseconds):
 	"""Calculates duty cycle based on desired pulse width"""
@@ -262,13 +310,14 @@ def delayMicroseconds(microseconds):
 # 	break;
 
 #test code
-for i in range(0,1):
-	liftServo.start(500/200.0)
-	lift(UP)
-	sleep(1)
-	lift(WIPE)
-	sleep(1)
-	lift(DOWN)
-	sleep(1)
+# for i in range(0,10):
+# 	liftServo.start(500/200.0)
+# 	lift(UP)
+# 	sleep(1)
+# 	lift(WIPE)
+# 	sleep(1)
+# 	lift(DOWN)
+# 	sleep(1)
+linePath(5,5)
 
 GPIO.cleanup()
