@@ -88,50 +88,119 @@ def wipe():
 	lift(UP)
 
 # given a number as a string (or a decimal point)
-def drawNum(num):
+def drawNum(num, x, y):
 	"""Given a digit or . as a string, writes the digit by lifting up the pen,
 	going to the appropriate location, putting the pen down, and then writing"""
 
-	if num == '0':
-		lift(UP)
-	elif num == '1':
-		lift(UP)
+	# if num == '0':
+	# 	lift(UP)
+	# elif num == '1':
+	# 	lift(UP)
 
-        """The outline for the code in the following seven lines was obtained from StackOverflow: "http://stackoverflow.com/questions/7207309/python-how-can-i-run-python-functions-in-parallel". This method will be used throughout our drawNum function. """
-        if __name__ == '__main__':
-            a = Process(target = rightadjust, args = (1,))
-            a.start()
-            b = Process(target = leftadjust, args = (1,))
-            b.start()
-            a.join()
-            b.join()
-        """The above method is called multiprocessing. It should allow us to executie both functions at the same time. Multiprocessing seems to be very important when we actually have to draw the 1. The left and right servos must move together, and at the same rate (taken care of by LIFTSPEED), so that the vertical straight line is drawn"""
-        lift(DOWN)
-        if __name__ == '__main__':
-            a = Process(target = rightwrite, args = (1,))
-            a.start()
-            b = Process(target = leftwrite, args = (1,))
-            b.start()
-            a.join()
-            b.join()
-	elif num == '2':
-		lift(UP)
-	elif num == '3':
-		lift(UP)
-	elif num == '4':
-		lift(UP)
-	elif num == '5':
-		lift(UP)
-	elif num == '6':
-		lift(UP)
-	elif num == '7':
-		lift(UP)
-	elif num == '8':
-		lift(UP)
-	elif num == '9':
-		lift(UP)
-	elif num == '.':
-		lift(UP)
+ #        """The outline for the code in the following seven lines was obtained from StackOverflow: "http://stackoverflow.com/questions/7207309/python-how-can-i-run-python-functions-in-parallel". This method will be used throughout our drawNum function. """
+ #        if __name__ == '__main__':
+ #            a = Process(target = rightadjust, args = (1,))
+ #            a.start()
+ #            b = Process(target = leftadjust, args = (1,))
+ #            b.start()
+ #            a.join()
+ #            b.join()
+ #        """The above method is called multiprocessing. It should allow us to executie both functions at the same time. Multiprocessing seems to be very important when we actually have to draw the 1. The left and right servos must move together, and at the same rate (taken care of by LIFTSPEED), so that the vertical straight line is drawn"""
+ #        lift(DOWN)
+ #        if __name__ == '__main__':
+ #            a = Process(target = rightwrite, args = (1,))
+ #            a.start()
+ #            b = Process(target = leftwrite, args = (1,))
+ #            b.start()
+ #            a.join()
+ #            b.join()
+	# elif num == '2':
+	# 	lift(UP)
+	# elif num == '3':
+	# 	lift(UP)
+	# elif num == '4':
+	# 	lift(UP)
+	# elif num == '5':
+	# 	lift(UP)
+	# elif num == '6':
+	# 	lift(UP)
+	# elif num == '7':
+	# 	lift(UP)
+	# elif num == '8':
+	# 	lift(UP)
+	# elif num == '9':
+	# 	lift(UP)
+	# elif num == '.':
+	# 	lift(UP)
+	if num == '0':
+		linePath(x + 12.0, y + 6.0)
+    	lift(0)
+    	arcPath(x + 7.0, y + 10.0, 10.0, -0.8, 6.7, 'Counterclockwise')
+    	lift(1)
+	if num == '1':
+		linePath(x + 3.0, y + 15.0)
+		lift(0)
+		drawTo(x + 10.0, y + 20.0)
+		drawTo(x + 10.0 , y + 0.0)
+		lift(1)
+	if num == '2':
+		linePath(x + 2.0, y + 12.0)
+		lift(0)
+		arcPath(x + 8.0, y + 14.0, 6.0, 3.0, -0.8, 'Clockwise')
+		linePath(x + 1.0, y + 0.0)
+		drawTo(x + 12.0 * scale, y + 0.0 * scale)
+		lift(1);
+	if num == '3':
+		linePath(x + 2 * scale, by + 17 * scale);
+		lift(0);
+		arcPath(x + 5.0, y + 15.0, 5.0, 3.0, -2.0, 'Clockwise');
+		arcPath(x + 5.0, y + 5.0, 5.0, 1.57, -3.0, 'Clockwise');
+		lift(1);
+  # case 4:
+  #   drawTo(bx + 10 * scale, by + 0 * scale);
+  #   lift(0);
+  #   drawTo(bx + 10 * scale, by + 20 * scale);
+  #   drawTo(bx + 2 * scale, by + 6 * scale);
+  #   drawTo(bx + 12 * scale, by + 6 * scale);
+  #   lift(1);
+  #   break;
+  # case 5:
+  #   drawTo(bx + 2 * scale, by + 5 * scale);
+  #   lift(0);
+  #   bogenGZS(bx + 5 * scale, by + 6 * scale, 6 * scale, -2.5, 2, 1);
+  #   drawTo(bx + 5 * scale, by + 20 * scale);
+  #   drawTo(bx + 12 * scale, by + 20 * scale);
+  #   lift(1);
+  #   break;
+  # case 6:
+  #   drawTo(bx + 2 * scale, by + 10 * scale);
+  #   lift(0);
+  #   bogenUZS(bx + 7 * scale, by + 6 * scale, 6 * scale, 2, -4.4, 1);
+  #   drawTo(bx + 11 * scale, by + 20 * scale);
+  #   lift(1);
+  #   break;
+  # case 7:
+  #   drawTo(bx + 2 * scale, by + 20 * scale);
+  #   lift(0);
+  #   drawTo(bx + 12 * scale, by + 20 * scale);
+  #   drawTo(bx + 2 * scale, by + 0);
+  #   lift(1);
+  #   break;
+  # case 8:
+  #   drawTo(bx + 5 * scale, by + 10 * scale);
+  #   lift(0);
+  #   bogenUZS(bx + 5 * scale, by + 15 * scale, 5 * scale, 4.7, -1.6, 1);
+  #   bogenGZS(bx + 5 * scale, by + 5 * scale, 5 * scale, -4.7, 2, 1);
+  #   lift(1);
+  #   break;
+
+  # case 9:
+  #   drawTo(bx + 9 * scale, by + 11 * scale);
+  #   lift(0);
+  #   bogenUZS(bx + 7 * scale, by + 15 * scale, 5 * scale, 4, -0.5, 1);
+  #   drawTo(bx + 5 * scale, by + 0);
+  #   lift(1);
+  #   break;
 
 def getDigits(temp):
 	"""Given the temp as a float, returns an array of the characters
@@ -405,11 +474,12 @@ leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
 #sleep(1)
 linePath(75.2, 47);
-linePath(10,10)
-arcPath(20, 10, 10, pi, 0, 'Clockwise')
+# linePath(25.0,25.0)
+# arcPath(32.0, 30.0, 10.0, -0.8, 6.7 , 'Counterclockwise')
 #calibrate()
 
-
+drawNumber(5, 25, '0')
+drawNumber(19,25, '1')
 
 """for i in range (0, 1000):
 	writeMicroseconds(leftServo, 1500-i)
