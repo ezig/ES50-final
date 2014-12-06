@@ -248,6 +248,8 @@ def linePath(x, y):
 		goToXY(currentX+dx/steps,currentY+dy/steps)
 		currentX += dx/steps
 		currentY += dy/steps
+		print(currentX)
+		print(currentY)
 
 def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 	sweptAngle = 0
@@ -379,7 +381,7 @@ def delayMicroseconds(microseconds):
 
 def calibrate():
 	linePath(-3, 29.2)
-  	sleep(0.5)
+  	sleep(3)
   	linePath(74.1, 28)
   	sleep(0.5)
 # while (1):
