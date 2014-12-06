@@ -407,9 +407,14 @@ rightServo.start(rightMicroseconds/200.0)
 for i in range (0, 1000):
 	writeMicroseconds(leftServo, 1500-i)
 	writeMicroseconds(rightServo, 1500+i)
-	sleep(0.001)
-	
-leftServo.stop()
-rightServo.stop()
+	sleep(0.01)
+
+for i in range (0, 1000):
+	writeMicroseconds(leftServo, 500+i)
+	writeMicroseconds(rightServo, 2500-i)
+	sleep(0.01)
+
+#leftServo.stop()
+#rightServo.stop()
 
 GPIO.cleanup()
