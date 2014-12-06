@@ -45,14 +45,14 @@ rightServo = GPIO.PWM(SERVOPINRIGHT, 50)
 liftServo = GPIO.PWM(SERVOPINLIFT, 50)
 
 # keeps track of location of pen
-currentX = 75
+currentX = 75.0
 currentY = 47.5
 
 p = 37
 l = 47
 
 # length of arms
-L1 = 35
+L1 = 35.0
 L2 = 55.1
 L3 = 13.2
 
@@ -248,8 +248,6 @@ def linePath(x, y):
 		goToXY(currentX+dx/steps,currentY+dy/steps)
 		currentX += dx/steps
 		currentY += dy/steps
-		print(currentX)
-		print(currentY)
 
 def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 	sweptAngle = 0
@@ -334,8 +332,8 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 def return_angle(a, b, c):
  	#cosine rule for angle between c and a
  	x = (a * a + c * c - b * b) / (2 * a * c)
-	if (x > 1.0):
-		x = 1
+	# if (x > 1.0):
+	# 	x = 1
 
  	return acos(x)
 
