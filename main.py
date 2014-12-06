@@ -247,15 +247,14 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 			centerY + radius * sin(startAngle + sweptAngle))
 		sweptAngle += increment
 
- def goToXY (x, y):
-	 '''
-	Assumes global variables p (length of lower robot arm segment) and l (length of upper robot arm segment) and currentX and currentY.
+def goToXY (x, y):
+	 
+	"""Assumes global variables p (length of lower robot arm segment) and l (length of upper robot arm segment) and currentX and currentY.
 	Takes in x, y coordinates of new destination with origin at the right servo.
 	Takes in a, b which are exterior angles of the servo -- a is negative from the horizontal, b is positive from the horizontal.
 	Returns the new angles of the servos. (Should newleft be negative of what it is now? Test and see.)
-	'''
-
-	global currentX, currentY, leftMicroseconds, rightMicroseconds, LEFTSERVONULL, RIGHTSERVONULL, servoLeft, servoRight, p, l
+	"""
+	global currentX, currentY, leftMicroseconds, rightMicroseconds, LEFTSERVONULL, RIGHTSERVONULL, servoLeft, servoRight, p, linePath
 
  	# Define the x and y distance the robot arms must travel
  	dx = x - currentX
@@ -282,7 +281,7 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 
 	# Because Python hates vectors, we have hard-coded the dot products that we are going to use.
 	L1dotL2 = (L1*cos(t1))*(L1*cos(t1) + dx) + (L1*sin(t1))*(L1*sin(t1) + dy)
-	L3dotL4 = L3*cos(t2))*(L3*cos(t2) + dx) + (L3*sin(t2))*(L3*sin(t2) + dy)
+	L3dotL4 = L3*cos(t2)*(L3*cos(t2) + dx) + (L3*sin(t2))*(L3*sin(t2) + dy)
 
  	# ang1 is the angle between vectors L1 and L2
  	# ang2 is the angle between vectors L3 and L4
