@@ -132,25 +132,25 @@ def drawNum(num, x, y):
 	# 	lift(UP)
 	# elif num == '.':
 	# 	lift(UP)
-	if num == '0':
+	if num == 0:
 		linePath(x + 12.0, y + 6.0)
     	lift(0)
     	arcPath(x + 7.0, y + 10.0, 10.0, -0.8, 6.7, 'Counterclockwise')
     	lift(1)
-	if num == '1':
+	if num == 1:
 		linePath(x + 3.0, y + 15.0)
 		lift(0)
 		drawTo(x + 10.0, y + 20.0)
 		drawTo(x + 10.0 , y + 0.0)
 		lift(1)
-	if num == '2':
+	if num == 2:
 		linePath(x + 2.0, y + 12.0)
 		lift(0)
 		arcPath(x + 8.0, y + 14.0, 6.0, 3.0, -0.8, 'Clockwise')
 		linePath(x + 1.0, y + 0.0)
 		drawTo(x + 12.0 * scale, y + 0.0 * scale)
 		lift(1);
-	if num == '3':
+	if num == 3:
 		linePath(x + 2 * scale, by + 17 * scale);
 		lift(0);
 		arcPath(x + 5.0, y + 15.0, 5.0, 3.0, -2.0, 'Clockwise');
@@ -478,8 +478,8 @@ linePath(75.2, 47);
 # arcPath(32.0, 30.0, 10.0, -0.8, 6.7 , 'Counterclockwise')
 #calibrate()
 
-drawNum(5, 25, '0')
-drawNum(19,25, '1')
+drawNum(5, 25, 0)
+drawNum(19,25, 1)
 
 """for i in range (0, 1000):
 	writeMicroseconds(leftServo, 1500-i)
