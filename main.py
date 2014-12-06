@@ -125,44 +125,44 @@ def getDigits(temp):
 # # While the pen is up, move the right servo to the correct starting angle, defined by LEVELRIGHT1a
 # def rightadjust(num):
 #     if num == 1
-#         if servoRight > LEVELRIGHT1A
-#             while servoRight > LEVELRIGHT1A
-#                 servoRight -= 1
-#                 lwriteMicrosceonds(rightServo, servoRight)
+#         if rightServo > LEVELRIGHT1A
+#             while rightServo > LEVELRIGHT1A
+#                 rightServo -= 1
+#                 lwriteMicrosceonds(rightServo, rightServo)
 #                 delayMicroseconds(LIFTSPEED)
-#         else if servoRight < LEVELRIGHT1A
-#             while servoRight > LEVELRIGHT1a
-#                 servoRight += 1
-#                 lwriteMicroseconds(rightServo, servoRight)
+#         else if rightServo < LEVELRIGHT1A
+#             while rightServo > LEVELRIGHT1a
+#                 rightServo += 1
+#                 lwriteMicroseconds(rightServo, rightServo)
 #                 delayMicroseconds(LIFTSPEED)
 
 # # After the pen is down, the right servo must move counterclockwise (the angle from the Raspberry Pi perspective is decreasing)
 # def rightwrite(num):
 #     if num == 1
-#         while servoRight > LEVELRIGHT1B
-#             servoRight -= 1
-#             lwriteMicroseconds(rightServo, servoRight)
+#         while rightServo > LEVELRIGHT1B
+#             rightServo -= 1
+#             lwriteMicroseconds(rightServo, rightServo)
 #             delayMicroseconds(LIFTSPEED)
 
 # # Move Left servo to the correct starting angle, defined by LEVELRIGHT1a
 # def leftadjust(num):
 #     if num == 1
-#         if servoLeft > LEVELLEFT1a
-#             while servoLeft > LEVELLEFT1a
-#                 servoLeft -= 1
-#                     lwriteMicrosceonds(leftServo, servoLeft)
+#         if leftServo > LEVELLEFT1a
+#             while leftServo > LEVELLEFT1a
+#                 leftServo -= 1
+#                     lwriteMicrosceonds(leftServo, leftServo)
 #                     delayMicroseconds(LIFTSPEED)
-#         else if servoLeft < LEVELLEFT1a
-#             while servoLeft > LEVELLEFT1a
-#                 servoLeft += 1
-#                 lwriteMicroseconds(leftServo, servoLeft)
+#         else if leftServo < LEVELLEFT1a
+#             while leftServo > LEVELLEFT1a
+#                 leftServo += 1
+#                 lwriteMicroseconds(leftServo, leftServo)
 #                 delayMicroseconds(LIFTSPEED)
 # # When the pen is down, the left servo must move clockwise (Raspberry Pi thinks the angle is increasing)
 # def leftwrite(num):
 #     if num == 1
-#         while servoLeft < LEVELLEFT1b
-#             servoLeft += 1
-#                 lwriteMicroseconds(leftServo, servoLeft)
+#         while leftServo < LEVELLEFT1b
+#             leftServo += 1
+#                 lwriteMicroseconds(leftServo, leftServo)
 #                 delayMicroseconds(LIFTSPEED)
 
 def lift(level):
@@ -254,7 +254,7 @@ def goToXY (x, y):
 	Takes in a, b which are exterior angles of the servo -- a is negative from the horizontal, b is positive from the horizontal.
 	Returns the new angles of the servos. (Should newleft be negative of what it is now? Test and see.)
 	"""
-	global currentX, currentY, leftMicroseconds, rightMicroseconds, LEFTSERVONULL, RIGHTSERVONULL, servoLeft, servoRight, p, linePath
+	global currentX, currentY, leftMicroseconds, rightMicroseconds, LEFTSERVONULL, RIGHTSERVONULL, leftServo, rightServo, p, linePath
 
  	# Define the x and y distance the robot arms must travel
  	dx = x - currentX
@@ -299,8 +299,8 @@ def goToXY (x, y):
  	leftMicroseconds = LEFTSERVONULL + 2000 * newleft/90.0
  	rightMicroseconds = RIGHTSERVONULL + 2000 * newright/90.0 
 
- 	writeMicroseconds(servoLeft, leftMicroseconds)
- 	writeMicroseconds(servoRight, rightMicroseconds)
+ 	writeMicroseconds(leftServo, leftMicroseconds)
+ 	writeMicroseconds(rightServo, rightMicroseconds)
 
 
 def writeMicroseconds(servo, microseconds):
@@ -329,10 +329,10 @@ def delayMicroseconds(microseconds):
 # 	sleep(1)
 # 	lift(DOWN)
 # 	sleep(1)
-servoLeft.start(leftMicroseconds)
+leftServo.start(leftMicroseconds)
 seroRight.start(rightMicroseconds)
 linePath(50,50)
-servoLeft.stop()
-servoRight.stop()
+leftServo.stop()
+rightServo.stop()
 
 GPIO.cleanup()
