@@ -375,7 +375,7 @@ def delayMicroseconds(microseconds):
 	sleep(microseconds/1000000.0)
 
 def calibrate():
-	drawTo(-3, 29.2)
+	linePath(-3, 29.2)
   	sleep(0.5)
   	linePath(74.1, 28)
   	sleep(0.5)
