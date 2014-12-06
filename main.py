@@ -473,13 +473,14 @@ def calibrate():
 leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
 #sleep(1)
-linePath(75.2, 47);
+linePath(5, 5);
 # linePath(25.0,25.0)
 # arcPath(32.0, 30.0, 10.0, -0.8, 6.7 , 'Counterclockwise')
 #calibrate()
 
 drawNum(5, 25, 0)
 drawNum(19,25, 1)
+drawNum(19,25,2)
 
 """for i in range (0, 1000):
 	writeMicroseconds(leftServo, 1500-i)
