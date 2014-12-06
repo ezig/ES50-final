@@ -402,8 +402,13 @@ def calibrate():
 # 	sleep(1)
 leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
-linePath(75.2, 47);
-calibrate()
+#linePath(75.2, 47);
+#calibrate()
+for i in range (0, 1000):
+	writeMicroseconds(leftServo, 1500-i)
+	writeMicroseconds(rightServo, 1500+i)
+	sleep(0.001)
+	
 leftServo.stop()
 rightServo.stop()
 
