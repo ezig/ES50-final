@@ -478,8 +478,8 @@ linePath(75.2, 47);
 # arcPath(32.0, 30.0, 10.0, -0.8, 6.7 , 'Counterclockwise')
 #calibrate()
 
-drawNumber(5, 25, '0')
-drawNumber(19,25, '1')
+drawNum(5, 25, '0')
+drawNum(19,25, '1')
 
 """for i in range (0, 1000):
 	writeMicroseconds(leftServo, 1500-i)
