@@ -52,8 +52,8 @@ p = 37
 l = 47
 
 # length of arms
-L1 = 37
-L2 = 47
+L1 = 35
+L2 = 55.1
 L3 = 13.2
 
 
@@ -240,15 +240,14 @@ def linePath(x, y):
 	dy = y - currentY
 
 	# use distance formula
-	distance = sqrt(dx*dx + dy*dy)
-	steps = int(4 * distance) #how many steps per unit?
+	steps = floor(4 * sqrt(dx*dx + dy*dy))
+	#steps = int(4 * distance) #how many steps per unit?
 
 	# break the 
 	for i in range(0,steps):
 		goToXY(currentX+dx/steps,currentY+dy/steps)
 		currentX += dx/steps
 		currentY += dy/steps
-		delayMicroseconds(1000)
 
 def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 	sweptAngle = 0
