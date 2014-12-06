@@ -45,8 +45,10 @@ rightServo = GPIO.PWM(SERVOPINRIGHT, 50)
 liftServo = GPIO.PWM(SERVOPINLIFT, 50)
 
 # keeps track of location of pen
-currentX = 75.0
-currentY = 47.5
+# currentX = 75.0
+# currentY = 47.5
+currentX = 10.0
+currentY = 10.0
 
 p = 37
 l = 47
@@ -473,7 +475,7 @@ def calibrate():
 leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
 #sleep(1)
-linePath(5, 5);
+#linePath(5, 5);
 # linePath(25.0,25.0)
 # arcPath(32.0, 30.0, 10.0, -0.8, 6.7 , 'Counterclockwise')
 #calibrate()
