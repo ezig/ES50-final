@@ -349,7 +349,7 @@ def goToXY(Tx, Ty):
 	a1 = atan2(dy, dx)
 	a2 = return_angle(L1, L2, c)
 
-	writeMicroseconds(servoLeft, floor(((a2 + a1 - pi) * SERVOFAKTOR) + LEFTSERVONULL))
+	writeMicroseconds(leftServo, floor(((a2 + a1 - pi) * SERVOFAKTOR) + LEFTSERVONULL))
 
 	#calculate joinr arm point for triangle of the right servo arm
 	a2 = return_angle(L2, L1, c);
