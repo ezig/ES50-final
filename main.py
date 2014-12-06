@@ -380,7 +380,7 @@ def delayMicroseconds(microseconds):
 
 def calibrate():
 	linePath(-3, 29.2)
-  	sleep(3)
+  	sleep(0.5)
   	linePath(74.1, 28)
   	sleep(0.5)
 # while (1):
@@ -405,7 +405,11 @@ leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
 #sleep(1)
 linePath(75.2, 47);
-calibrate()
+linePath(10,10)
+arcPath(20, 10, 10, pi, 0, 'Clockwise')
+#calibrate()
+
+
 
 """for i in range (0, 1000):
 	writeMicroseconds(leftServo, 1500-i)
