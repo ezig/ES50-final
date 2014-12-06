@@ -338,7 +338,8 @@ def return_angle(a, b, c):
  	return acos(x)
 
 def goToXY(Tx, Ty):
- 	delayMicroseconds(1000)
+ 	#delayMicroseconds(10000)
+	sleep(0.005)
 
  	global O1X, O1Y, L1, L2, L3, rightServo, leftServo, LEFTSERVONULL, RIGHTSERVONULL 
 
@@ -402,18 +403,19 @@ def calibrate():
 # 	sleep(1)
 leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
-sleep(1)
-#linePath(75.2, 47);
-#calibrate()
-for i in range (0, 1000):
+#sleep(1)
+linePath(75.2, 47);
+calibrate()
+
+"""for i in range (0, 1000):
 	writeMicroseconds(leftServo, 1500-i)
 	writeMicroseconds(rightServo, 1500+i)
-	sleep(0.01)
+	sleep(0.001)
 
 for i in range (0, 1000):
 	writeMicroseconds(leftServo, 500+i)
 	writeMicroseconds(rightServo, 2500-i)
-	sleep(0.01)
+	sleep(0.001)"""
 
 #leftServo.stop()
 #rightServo.stop()
