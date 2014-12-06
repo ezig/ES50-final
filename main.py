@@ -137,7 +137,7 @@ def drawNum(num, x, y):
 	if num == 0:
 		# linePath(x + 12.0, y + 6.0)
 		lift(0)
-    	arcPath(x + 1.0, y + 30.0, 15.0, -0.8, 6.7, 'Counterclockwise')
+    	arcPath(x + 1.0, y + 70.0, 15.0, -0.8, 6.7, 'Counterclockwise')
     	lift(1)
 	if num == 1:
 		linePath(x + 3.0, y + 15.0)
