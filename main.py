@@ -15,9 +15,12 @@ DOWN = 1
 WIPE = 2
 
 # Positions for various leves of lifting
-LEVELWRITE = 750
-LEVELUP = 1750
-LEVELWIPE = 1250
+LEVELWRITE = 1500
+LEVELUP = 2000
+LEVELWIPE = 1750
+
+LEFTSERVONULL = 500
+RIGHTSERVONULL = 2500
 
 # determines speed of the servo, higher is slower
 LIFTSPEED = 1500
@@ -38,8 +41,15 @@ rightServo = GPIO.PWM(SERVOPINRIGHT, 50)
 liftServo = GPIO.PWM(SERVOPINLIFT, 50)
 
 # keeps track of location of pen
-currentX = 0
-currentY = 0
+currentX = 45
+currentY = 45
+
+p = 37
+l = 47
+
+# keeps track of left right servo position
+leftMicroseconds = 1500
+rightMicroseconds = 1500
 
 # Keeps track of the lift position of the pen
 servoHeight = 500
@@ -222,8 +232,7 @@ def linePath(x, y):
 		goToXY(currentX+dx/steps,currentY+dy/steps)
 		currentX += dx/steps
 		currentY += dy/steps
-		print(currentX)
-		current(Y)
+		delayMicroseconds(1000)
 
 def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 	sweptAngle = 0
@@ -238,17 +247,15 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 			centerY + radius * sin(startAngle + sweptAngle))
 		sweptAngle += increment
 
-
-p = 37 mm
- l = 47 mm
-
- def goToXY (x, y, a, b):
-	 	'''
+ def goToXY (x, y):
+	 '''
 	Assumes global variables p (length of lower robot arm segment) and l (length of upper robot arm segment) and currentX and currentY.
 	Takes in x, y coordinates of new destination with origin at the right servo.
 	Takes in a, b which are exterior angles of the servo -- a is negative from the horizontal, b is positive from the horizontal.
 	Returns the new angles of the servos. (Should newleft be negative of what it is now? Test and see.)
 	'''
+
+	global currentX, currentY, leftMicroseconds, rightMicroseconds, LEFTSERVONULL, RIGHTSERVONULL, servoLeft, servoRight, p, l
 
  	# Define the x and y distance the robot arms must travel
  	dx = x - currentX
@@ -290,7 +297,12 @@ p = 37 mm
  	newleft = t1 + ang1 - leftf
  	newright = t2 + ang2 - rightf
 
-return newleft, newright
+ 	leftMicroseconds = LEFTSERVONULL + 2000 * newleft/90.0
+ 	rightMicroseconds = RIGHTSERVONULL + 2000 * newright/90.0 
+
+ 	writeMicroseconds(servoLeft, leftMicroseconds)
+ 	writeMicroseconds(servoRight, rightMicroseconds)
+
 
 def writeMicroseconds(servo, microseconds):
 	"""Calculates duty cycle based on desired pulse width"""
@@ -318,6 +330,10 @@ def delayMicroseconds(microseconds):
 # 	sleep(1)
 # 	lift(DOWN)
 # 	sleep(1)
-linePath(5,5)
+servoLeft.start(leftMicroseconds)
+seroRight.start(rightMicroseconds)
+linePath(50,50)
+servoLeft.stop()
+servoRight.stop()
 
 GPIO.cleanup()
