@@ -331,8 +331,11 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 
 def return_angle(a, b, c):
  	#cosine rule for angle between c and a
- 	print((a * a + c * c - b * b) / (2 * a * c))
- 	return acos((a * a + c * c - b * b) / (2 * a * c))
+ 	x = (a * a + c * c - b * b) / (2 * a * c))
+	if (x > 1.0):
+		x = 1
+
+ 	return acos(x)
 
 def goToXY(Tx, Ty):
  	delayMicroseconds(1000)
