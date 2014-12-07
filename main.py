@@ -181,12 +181,18 @@ def drawNum(num, x, y):
 		linePath(x + 10.0, y + 18.0)
 		lift(UP)
 	if num == 8:
-		linePath(x + 1.0, y + 9.0)
+		linePath(x + 3.0, y - 3.0)
+		lift (DOWN)
+		arcPath(x + 0.0, y + 0.0, 7.0, 4.5, -4.8, 'Clockwise')
+		sleep(0.5)
+		arcPath(x + 8.0, y + 14.0, 7.0, 4.5, 11.0, 'Counterclockwise')
+		lift(UP)
+		"""linePath(x + 1.0, y + 9.0)
 		lift(DOWN)
 		arcPath(x + 1.0, y - 1.0, 7.0, 6.0, -6.0, 'Counterclockwise')
 		sleep(0.01)
 		arcPath(x + 1.0, y + 17.0, 9.0, 5.5, -3.0, 'Clockwise')
-		lift(UP)
+		lift(UP)"""
 	if num == 9:
 		linePath(x + 1.0, y + 3.0)
 		lift(DOWN)
