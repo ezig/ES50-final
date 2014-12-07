@@ -3,6 +3,7 @@ from time import sleep
 import RPi.GPIO as GPIO 
 from math import * 
 from multiprocessing import Process
+from random import randint
 
 # GPIO pins for servo
 SERVOPINLEFT = 11
@@ -16,7 +17,7 @@ WIPE = 2
 
 # Positions for various leves of lifting
 LEVELWRITE = 1500
-LEVELUP = 2000
+LEVELUP = 2500
 LEVELWIPE = 1750
 
 #LEFTSERVONULL = 500
@@ -159,12 +160,12 @@ def drawNum(num, x, y):
 	if num == 5:
 		linePath(x + 3.0, y - 3.0)
 		lift(DOWN)
-		sleep(0.01)
-		linePath(x + 10.0, y - 3.0)
-		sleep(0.1)
-		linePath(x + 10.0, y + 12.0)
-		sleep(0.01)
-		arcPath(x + 6.5, y + 14.0, 10.0, 6.7, 0.2, 'Clockwise')
+		sleep(0.5)
+		linePath(x + 15.0, y + 0.0)
+		sleep(0.5)
+		linePath(x + 15.0, y + 12.0)
+		sleep(0.5)
+		arcPath(x + 6.5, y + 14.0, 7.0, 6.0, 0.2, 'Clockwise')
 		lift(UP)
 	if num == 6:
 		linePath(x + 1.0, y - 2.0)
@@ -537,8 +538,10 @@ def calibrate():
 # 	lift(DOWN)
 # 	sleep(1)
 
-weatherGetter = Weather()
-temp = int(weatherGetter.getWeather())
+#weatherGetter = Weather()
+#temp = int(weatherGetter.getWeather())
+#temp = randint(10,99)
+temp = 88
 print(temp)
 
 leftServo.start(leftMicroseconds/200.0)
