@@ -1,7 +1,7 @@
-from weather import *
-from time import sleep
-import RPi.GPIO as GPIO
-from math import *
+from weather import * 
+from time import sleep 
+import RPi.GPIO as GPIO 
+from math import * 
 from multiprocessing import Process
 
 # GPIO pins for servo
@@ -132,32 +132,36 @@ def drawNum(num, x, y):
 	# 	lift(UP)
 	# elif num == '9':
 	# 	lift(UP)
+
 	# elif num == '.':
 	# 	lift(UP)
-	if num == 0:
+	arcPath(x +  0.0, y + 0.0, 5.0, 0.0, 3.0, 'Counterclockwise')
+	"""if num == 0:
 		# linePath(x + 12.0, y + 6.0)
 		lift(0)
-    	arcPath(x + 1.0, y + 60.0, 15.0, -0.8, 6.7, 'Counterclockwise')
-    	lift(1)
+    		arcPath(x + 1.0, y + 45.0, 15.0, -0.8, 6.7, 'Counterclockwise')
+    		lift(1)
 	if num == 1:
-		linePath(x + 3.0, y + 15.0)
+		linePath(x + 0.0, y - 30.0)
 		lift(0)
-		drawTo(x + 10.0, y + 20.0)
-		drawTo(x + 10.0 , y + 0.0)
+		linePath(x + 0.0, y - 20.0)
+		linePath(x + 0.0 , y + 0.0)
 		lift(1)
 	if num == 2:
-		linePath(x + 2.0, y + 12.0)
+		linePath(x + 10.0, y - 30.0)
 		lift(0)
-		arcPath(x + 8.0, y + 14.0, 6.0, 3.0, -0.8, 'Clockwise')
-		linePath(x + 1.0, y + 0.0)
-		drawTo(x + 12.0 * scale, y + 0.0 * scale)
-		lift(1);
+		arcPath(x + 0.0, y - 30.0, 15.0, 3.0, 0.0, 'Clockwise')
+		arcPath(x + 5.0, y + 30.0, 15.0, 7.0, -0.8, 'Clockwise')
+		linePath(x + 5.0, y - 20.0)
+		linePath(x + 20.0, y - 0.0)
+		linePath(x - 30.0, y + 0.0)
+		lift(1)
 	if num == 3:
 		linePath(x + 2 * scale, by + 17 * scale);
-		lift(0);
+		lift(0)
 		arcPath(x + 5.0, y + 15.0, 5.0, 3.0, -2.0, 'Clockwise');
 		arcPath(x + 5.0, y + 5.0, 5.0, 1.57, -3.0, 'Clockwise');
-		lift(1);
+		lift(1)"""
   # case 4:
   #   drawTo(bx + 10 * scale, by + 0 * scale);
   #   lift(0);
@@ -325,9 +329,12 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 
 	if direction == 'Clockwise':
 		increment = -0.05 # how far to go each step 
+		"""while startAngle + sweptAngle > endAngle:
+			linePath(centerX + radius * cos(startAngle + sweptAngle),
+				centerY + radius * sin(startAngle + sweptAngle))
+			sweptAngle += increment"""
 	elif direction == 'Counterclockwise':
 		increment = 0.05
-
 	while startAngle + sweptAngle < endAngle:
 		linePath(centerX + radius * cos(startAngle + sweptAngle), 
 			centerY + radius * sin(startAngle + sweptAngle))
@@ -480,7 +487,7 @@ rightServo.start(rightMicroseconds/200.0)
 # arcPath(32.0, 30.0, 10.0, -0.8, 6.7 , 'Counterclockwise')
 #calibrate()
 
-drawNum(5, 25, 0)
+drawNum(0,10, 10)
 # drawNum(19,25, 1)
 # drawNum(19,25,2)
 
