@@ -70,7 +70,7 @@ leftMicroseconds = 1500
 rightMicroseconds = 1500
 
 # Keeps track of the lift position of the pen
-servoHeight = 500
+servoHeight = 2000
 
 # For each number, there is a set of angles that needs to be reached by the left and right servos
 # Point A would be at the top of zero and point B would be at the bottom of zero; it would write out 0 in a counter clockwise fashion
@@ -93,7 +93,7 @@ def wipe():
 def drawNum(num, x, y):
 	"""Given a digit or . as a string, writes the digit by lifting up the pen,
 	going to the appropriate location, putting the pen down, and then writing"""
-
+	global UP,DOWN, WIPE
 	# if num == '0':
 	# 	lift(UP)
 	# elif num == '1':
@@ -538,13 +538,18 @@ def calibrate():
 # 	sleep(1)
 leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
+liftServo.start(servoHeight/200.0)
 #sleep(1)
 #linePath(5, 5);
 # linePath(25.0,25.0)
 # arcPath(32.0, 30.0, 10.0, -0.8, 6.7 , 'Counterclockwise')
 #calibrate()
+#lift(UP)
 
-drawNum(6, 5, 25)
+drawNum(3, 15.0, 25.0)
+linePath(0.0, 25.0)
+drawNum(6, 0.0, 25.0)
+linePath(10.0, 10.0)
 # drawNum(19,25, 1)
 # drawNum(19,25,2)
 
