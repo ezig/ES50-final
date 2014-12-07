@@ -159,10 +159,10 @@ def drawNum(num, x, y):
 		arcPath(x + 6.5, y + 14.0, 5.0, 6.7, 0.2, 'Clockwise')
 		lift(UP)
 	if num == 6:
-		linePath()
+		#linePath()
 		lift(0)
-		arcPath()
-		arcPath()
+		arcPath(x + 1.0, y + 15.0, 8.0, -0.8, 7.6, 'Counterclockwise')
+		#arcPath()
 		lift(1)
 	if num == 7:
 		linePath()
@@ -533,7 +533,7 @@ rightServo.start(rightMicroseconds/200.0)
 # arcPath(32.0, 30.0, 10.0, -0.8, 6.7 , 'Counterclockwise')
 #calibrate()
 
-drawNum(5, 5, 25)
+drawNum(6, 5, 25)
 # drawNum(19,25, 1)
 # drawNum(19,25,2)
 
