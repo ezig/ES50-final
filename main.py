@@ -269,7 +269,7 @@ def getDigits(temp):
 	"""Given the temp as a float, returns an array of the characters
 	representing the digits (and the decimal point)"""
 
-	return list(str(temp))
+	return list(int(temp))
 # # While the pen is up, move the right servo to the correct starting angle, defined by LEVELRIGHT1a
 # def rightadjust(num):
 #     if num == 1
@@ -536,6 +536,11 @@ def calibrate():
 # 	sleep(1)
 # 	lift(DOWN)
 # 	sleep(1)
+
+weatherGetter = Weather()
+temp = int(weatherGetter.getWeather())
+print(temp)
+
 leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
 liftServo.start(servoHeight/200.0)
@@ -546,9 +551,9 @@ liftServo.start(servoHeight/200.0)
 #calibrate()
 #lift(UP)
 
-drawNum(3, 15.0, 25.0)
+drawNum(temp / 10, 15.0, 25.0)
 linePath(0.0, 25.0)
-drawNum(6, 0.0, 25.0)
+drawNum(temp % 10, 0.0, 25.0)
 linePath(10.0, 10.0)
 # drawNum(19,25, 1)
 # drawNum(19,25,2)
