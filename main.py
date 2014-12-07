@@ -118,24 +118,69 @@ def drawNum(num, x, y):
  #            b.join()
 	# elif num == '2':
 	# 	lift(UP)
-	# elif num == '3':
-	# 	lift(UP)
-	# elif num == '4':
-	# 	lift(UP)
-	# elif num == '5':
-	# 	lift(UP)
-	# elif num == '6':
-	# 	lift(UP)
-	# elif num == '7':
-	# 	lift(UP)
-	# elif num == '8':
-	# 	lift(UP)
-	# elif num == '9':
-	# 	lift(UP)
 
-	# elif num == '.':
-	# 	lift(UP)
-	arcPath(x +  0.0, y + 0.0, 5.0, 0.0, 3.0, 'Counterclockwise')
+	if num == 0:
+		#linePath(x - 1.0, y - 1.0)
+		lift(DOWN)
+		arcPath(x + 1.0, y + 15.0, 10.0, -0.8, 7.6, 'Counterclockwise')
+		lift(UP)
+	if num == 1:
+		#linePath(x + 0.0, y - 30.0)
+		lift(DOWN)
+		linePath(x + 0.0, y + 20.0)
+		lift(UP)
+	if num == 2:
+		#linePath()
+		lift(DOWN)
+		arcPath(x + 1.0, y + 3.0, 15.0, 6.5, 3, 'Clockwise')
+		linePath(x + 20.0, y + 25.0)
+		linePath(x - 13.0, y + 20.0)
+		lift(UP)
+	if num == 3:
+		linePath()
+		lift(0)
+		arcPath()
+		arcPath()
+		lift(1)
+	if num == 4:
+		linePath()
+		lift(0)
+		linePath()
+		linePath()
+		linePath()
+		linePath()
+		lift(1)
+	if num == 5:
+		linePath()
+		lift(0)
+		linePath()
+		linePath()
+		arcPath()
+		lift(1)
+	if num == 6:
+		linePath()
+		lift(0)
+		arcPath()
+		arcPath()
+		lift(1)
+	if num == 7:
+		linePath()
+		lift(0)
+		linePath()
+		linePath()
+		lift(1)
+	if num == 8:
+		linePath()
+		lift(0)
+		arcPath()
+		arcPath()
+		lift(1)
+	if num == 9:
+		linePath()
+		lift(0)
+		arcPath()
+		linePath()
+		lift(1)
 	"""if num == 0:
 		# linePath(x + 12.0, y + 6.0)
 		lift(0)
@@ -329,16 +374,16 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 
 	if direction == 'Clockwise':
 		increment = -0.05 # how far to go each step 
-		"""while startAngle + sweptAngle > endAngle:
+		while startAngle + sweptAngle > endAngle:
 			linePath(centerX + radius * cos(startAngle + sweptAngle),
 				centerY + radius * sin(startAngle + sweptAngle))
-			sweptAngle += increment"""
+			sweptAngle += increment
 	elif direction == 'Counterclockwise':
 		increment = 0.05
-	while startAngle + sweptAngle < endAngle:
-		linePath(centerX + radius * cos(startAngle + sweptAngle), 
-			centerY + radius * sin(startAngle + sweptAngle))
-		sweptAngle += increment
+		while startAngle + sweptAngle < endAngle:
+			linePath(centerX + radius * cos(startAngle + sweptAngle), 
+				centerY + radius * sin(startAngle + sweptAngle))
+			sweptAngle += increment
 
 # def goToXY (x, y):
 	 
@@ -487,7 +532,7 @@ rightServo.start(rightMicroseconds/200.0)
 # arcPath(32.0, 30.0, 10.0, -0.8, 6.7 , 'Counterclockwise')
 #calibrate()
 
-drawNum(0,10, 10)
+drawNum(2, 5, 25)
 # drawNum(19,25, 1)
 # drawNum(19,25,2)
 
