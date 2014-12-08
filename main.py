@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 from math import * 
 from multiprocessing import Process
 from random import randint
+import sys
 
 # GPIO pins for servo
 SERVOPINLEFT = 11
@@ -123,7 +124,7 @@ def drawNum(num, x, y):
 	if num == 0:
 		linePath(x + 1.0, y + 5.0)
 		lift(DOWN)
-		arcPath(x + 1.0, y + 15.0, 12.0, -0.8, 7.6, 'Counterclockwise')
+		arcPath(x + 1.0, y + 15.0, 7.0, -0.8, 7.6, 'Counterclockwise')
 		lift(UP)
 	if num == 1:
 		linePath(x + 0.0, y + 5.0)
@@ -131,19 +132,19 @@ def drawNum(num, x, y):
 		linePath(x + 0.0, y + 20.0)
 		lift(UP)
 	if num == 2:
-		linePath(x + 1.0, y - 3.0)
+		linePath(x + 0.0, y + 3.0)
 		lift(DOWN)
-		arcPath(x + 1.0, y + 3.0, 12.0, 6.5, 3, 'Clockwise')
+		arcPath(x - 12.0, y + 3.0, 12.0, 6.5, 3, 'Clockwise')
 		linePath(x + 20.0, y + 25.0)
 		sleep(0.01)
 		linePath(x - 13.0, y + 20.0)
 		lift(UP)
 	if num == 3:
-		linePath(x + 1.0, y + 3.0)
+		linePath(x + 1.0, y + 5.0)
 		lift(DOWN)
-		arcPath(x + 1.0, y + 7.0, 8.0, 6.0, 1.0, 'Clockwise')
+		arcPath(x - 7.0, y + 7.0, 7.0, 6.0, 1.0, 'Clockwise')
 		sleep(0.01)
-		arcPath(x + 1.0, y + 18.0, 8.0, 6.0, 0.0, 'Clockwise')
+		arcPath(x + 1.0, y + 21.0, 7.0, 6.0, 0.0, 'Clockwise')
 		#linePath(x - 4.0, y + 18.0)
 		lift(UP)
 	if num == 4:
@@ -171,7 +172,6 @@ def drawNum(num, x, y):
 		linePath(x + 1.0, y - 2.0)
 		lift(DOWN)
 		arcPath(x + 1.0, y + 15.0, 8.0, -0.8, 7.6, 'Counterclockwise')
-		#arcPath()
 		lift(UP)
 	if num == 7:
 		linePath(x + 5.0, y - 3.0)
@@ -187,12 +187,6 @@ def drawNum(num, x, y):
 		sleep(0.5)
 		arcPath(x + 8.0, y + 14.0, 7.0, 4.5, 11.0, 'Counterclockwise')
 		lift(UP)
-		"""linePath(x + 1.0, y + 9.0)
-		lift(DOWN)
-		arcPath(x + 1.0, y - 1.0, 7.0, 6.0, -6.0, 'Counterclockwise')
-		sleep(0.01)
-		arcPath(x + 1.0, y + 17.0, 9.0, 5.5, -3.0, 'Clockwise')
-		lift(UP)"""
 	if num == 9:
 		linePath(x + 1.0, y + 3.0)
 		lift(DOWN)
@@ -547,7 +541,7 @@ def calibrate():
 #weatherGetter = Weather()
 #temp = int(weatherGetter.getWeather())
 #temp = randint(10,99)
-temp = 88
+temp = int(sys.argv[1])
 print(temp)
 
 leftServo.start(leftMicroseconds/200.0)
@@ -560,9 +554,9 @@ liftServo.start(servoHeight/200.0)
 #calibrate()
 #lift(UP)
 
-drawNum(temp / 10, 15.0, 25.0)
+drawNum(temp / 10, 20.0, 25.0)
 linePath(0.0, 25.0)
-drawNum(temp % 10, 0.0, 25.0)
+drawNum(temp % 10, 5.0, 25.0)
 linePath(10.0, 10.0)
 # drawNum(19,25, 1)
 # drawNum(19,25,2)
