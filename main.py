@@ -159,26 +159,27 @@ def drawNum(num, x, y):
 		linePath(x - 10.0, y + 19.0)
 		lift(UP)
 	if num == 5:
-		linePath(x + 3.0, y - 3.0)
+		linePath(x + 5.0, y + 0.0)
 		lift(DOWN)
 		sleep(0.5)
 		linePath(x + 15.0, y + 0.0)
 		sleep(0.5)
-		linePath(x + 15.0, y + 12.0)
+		linePath(x + 15.0, y + 22.0)
 		sleep(0.5)
-		arcPath(x + 6.5, y + 14.0, 7.0, 6.0, 0.2, 'Clockwise')
+		arcPath(x + 6.5, y + 20.0, 7.0, 6.0, 0.2, 'Clockwise')
 		lift(UP)
 	if num == 6:
 		linePath(x + 1.0, y - 2.0)
 		lift(DOWN)
-		arcPath(x + 1.0, y + 15.0, 8.0, -0.8, 7.6, 'Counterclockwise')
+		arcPath(x + 1.0, y + 18.0, 7.0, -0.8, 7.6, 'Counterclockwise')
+		sleep(0.5)
 		lift(UP)
 	if num == 7:
-		linePath(x + 5.0, y - 3.0)
+		linePath(x + 6.0, y - 3.0)
 		lift(DOWN)
-		linePath(x - 20.0, y - 3.0)
+		linePath(x - 15.0, y - 3.0)
 		sleep(0.01)
-		linePath(x + 10.0, y + 18.0)
+		linePath(x + 6.0, y + 18.0)
 		lift(UP)
 	if num == 8:
 		linePath(x + 3.0, y - 3.0)
@@ -537,16 +538,31 @@ def calibrate():
 # 	sleep(1)
 # 	lift(DOWN)
 # 	sleep(1)
-
-#weatherGetter = Weather()
-#temp = int(weatherGetter.getWeather())
-#temp = randint(10,99)
-temp = int(sys.argv[1])
-print(temp)
-
 leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
 liftServo.start(servoHeight/200.0)
+
+if len(sys.argv) == 1:	
+	weatherGetter = Weather()
+	temp = int(weatherGetter.getWeather())	
+	print(temp)
+
+	drawNum(temp / 10, 20.0, 25.0)
+	linePath(0.0, 25.0)
+	drawNum(temp % 10, 5.0, 25.0)
+	linePath(10.0, 10.0)	
+else: 
+	num = int(sys.argv[1])
+	print(num)
+	if num < 10:
+		drawNum(num, 20.0, 25.0)
+		linePath(10.0, 10.0)
+	else:
+		drawNum(num / 10, 20.0, 25.0)
+		linePath(0.0, 25.0)
+		drawNum(num % 10, 5.0, 25.0)
+		linePath(10.0, 10.0)
+
 #sleep(1)
 #linePath(5, 5);
 # linePath(25.0,25.0)
@@ -554,10 +570,10 @@ liftServo.start(servoHeight/200.0)
 #calibrate()
 #lift(UP)
 
-drawNum(temp / 10, 20.0, 25.0)
-linePath(0.0, 25.0)
-drawNum(temp % 10, 5.0, 25.0)
-linePath(10.0, 10.0)
+#drawNum(temp / 10, 20.0, 25.0)
+#linePath(0.0, 25.0)
+#drawNum(temp % 10, 5.0, 25.0)
+#linePath(10.0, 10.0)
 # drawNum(19,25, 1)
 # drawNum(19,25,2)
 
