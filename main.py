@@ -26,6 +26,7 @@ LEVELWIPE = 1750
 
 SERVOFAKTOR = 620
 
+# angles for the left and right servos
 LEFTSERVONULL = 1900
 RIGHTSERVONULL = 984
 # determines speed of the servo, higher is slower
@@ -120,8 +121,10 @@ def drawNum(num, x, y):
  #            b.join()
 	# elif num == '2':
 	# 	lift(UP)
-
+    
+    # For each number, any functions between lift(DOWN) and lift(UP) will be written on the platform. At times, the sleep function is called to make turns neat by delaying the pen.
 	if num == 0:
+
 		linePath(x + 1.0, y + 5.0)
 		lift(DOWN)
 		arcPath(x + 1.0, y + 15.0, 7.0, -0.8, 7.6, 'Counterclockwise')
@@ -129,70 +132,90 @@ def drawNum(num, x, y):
 	if num == 1:
 		linePath(x + 0.0, y + 5.0)
 		lift(DOWN)
+        # Move upwards 20 points
 		linePath(x + 0.0, y + 20.0)
 		lift(UP)
 	if num == 2:
 		linePath(x + 0.0, y + 3.0)
 		lift(DOWN)
+        # Make rounded part of 2
 		arcPath(x - 12.0, y + 3.0, 12.0, 6.5, 3, 'Clockwise')
+        # Make the semicircle's last part straight
 		linePath(x + 20.0, y + 25.0)
 		sleep(0.01)
+        # Make base of 2
 		linePath(x - 13.0, y + 20.0)
 		lift(UP)
 	if num == 3:
 		linePath(x + 1.0, y + 5.0)
 		lift(DOWN)
+        # Make upper curve of 3
 		arcPath(x - 7.0, y + 7.0, 7.0, 6.0, 1.0, 'Clockwise')
 		sleep(0.01)
+        # Make lower curve of 3
 		arcPath(x + 1.0, y + 21.0, 7.0, 6.0, 0.0, 'Clockwise')
 		#linePath(x - 4.0, y + 18.0)
 		lift(UP)
 	if num == 4:
 		linePath(x + 1.0, y - 3.0)
 		lift(DOWN)
+        # Make diagonal line of 4
 		linePath(x + 1.0, y + 12.0)
 		sleep(0.01)
+        # Make horizontal line of 4
 		linePath(x - 10.0, y + 12.0)
 		sleep(0.01)
+        # Move upwards to complete the "triangle" in the figure 4
 		linePath(x - 10.0, y - 3.0)
 		sleep(0.01)
+        # Move downwards to make the final "tail" of 4
 		linePath(x - 10.0, y + 19.0)
 		lift(UP)
 	if num == 5:
 		linePath(x + 5.0, y + 0.0)
 		lift(DOWN)
 		sleep(0.5)
+        # Make top horizontal line of 5
 		linePath(x + 15.0, y + 0.0)
 		sleep(0.5)
+        # Make vertical line of 5
 		linePath(x + 15.0, y + 22.0)
 		sleep(0.5)
-		arcPath(x + 6.5, y + 20.0, 7.0, 6.0, 0.2, 'Clockwise')
+        # Make the bottom semicircle of 5
+ 		arcPath(x + 6.5, y + 20.0, 7.0, 6.0, 0.2, 'Clockwise')
 		lift(UP)
 	if num == 6:
 		linePath(x + 1.0, y - 2.0)
 		lift(DOWN)
+        # The circular base and rounded end of 6 are created because the difference between startAngle and endAngle is more than 6.
 		arcPath(x + 1.0, y + 18.0, 7.0, -0.8, 7.6, 'Counterclockwise')
 		sleep(0.5)
 		lift(UP)
 	if num == 7:
 		linePath(x + 6.0, y - 3.0)
 		lift(DOWN)
+        # Create horizontal line of 7
 		linePath(x - 15.0, y - 3.0)
 		sleep(0.01)
+        # Create diagonal part of 7
 		linePath(x + 6.0, y + 18.0)
 		lift(UP)
 	if num == 8:
 		linePath(x + 3.0, y - 3.0)
 		lift (DOWN)
+        # Create upper circle of 8
 		arcPath(x + 0.0, y + 0.0, 7.0, 4.5, -4.8, 'Clockwise')
 		sleep(0.5)
+        # Create lower circle of 8
 		arcPath(x + 8.0, y + 14.0, 7.0, 4.5, 11.0, 'Counterclockwise')
 		lift(UP)
 	if num == 9:
 		linePath(x + 1.0, y + 3.0)
 		lift(DOWN)
+        # Create upper circle of 9
 		arcPath(x + 1.0, y + 2.0, 9.0, 5.5, -3.0, 'Clockwise')
 		sleep(0.01)
+        # The "tail" of 9 after the circle will be a diagonal line
 		linePath(x -8.0, y + 20.0)
 		lift(UP)
 	"""if num == 0:
@@ -323,7 +346,9 @@ def lift(level):
 
 	#start the servo at the current position
 	# (microseconds / 1000 / 20 ms  * 100% = duty cycle)
-
+    
+    # For each level, add or subtract one until the corect height is reached
+    # LEVELUP means the pen is not touching the surface
 	if level == UP:
 		if servoHeight >= LEVELUP:
 			while servoHeight >= LEVELUP:
@@ -336,7 +361,7 @@ def lift(level):
 				servoHeight += 1
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
-
+    # LEVELDOWN means the pen can write on the surface
 	elif level == DOWN:
 		if servoHeight >= LEVELWRITE:
 			while servoHeight >= LEVELWRITE:
@@ -349,7 +374,7 @@ def lift(level):
 				servoHeight += 1
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
-
+    # LEVELWIPE means the pen can erase what is written on the surface
 	elif level == WIPE:
 		if servoHeight >= WIPE:
 			while servoHeight >= LEVELWIPE:
@@ -377,23 +402,26 @@ def linePath(x, y):
 	steps = int(floor(4 * sqrt(dx*dx + dy*dy)))
 	#steps = int(4 * distance) #how many steps per unit?
 
-	# break the 
+	# Move in small increments
 	for i in range(0,steps):
 		goToXY(currentX+dx/steps,currentY+dy/steps)
 		currentX += dx/steps
 		currentY += dy/steps
 
+# The angles for the circle range from 0 to 6.
 def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 	sweptAngle = 0
 
 	if direction == 'Clockwise':
-		increment = -0.05 # how far to go each step 
+		increment = -0.05 # how far to go each step
+        # Clockwise motion increases the angle
 		while startAngle + sweptAngle > endAngle:
 			linePath(centerX + radius * cos(startAngle + sweptAngle),
 				centerY + radius * sin(startAngle + sweptAngle))
 			sweptAngle += increment
 	elif direction == 'Counterclockwise':
 		increment = 0.05
+        # Counterclockwise motion decreases the angle
 		while startAngle + sweptAngle < endAngle:
 			linePath(centerX + radius * cos(startAngle + sweptAngle), 
 				centerY + radius * sin(startAngle + sweptAngle))
@@ -512,7 +540,7 @@ def writeMicroseconds(servo, microseconds):
 	servo.ChangeDutyCycle(microseconds/200.0)
 
 def delayMicroseconds(microseconds):
-	"""Coverts microsecond delay to seconds delay"""
+	"""Converts microseconds delay to seconds delay"""
 	sleep(microseconds/1000000.0)
 
 def calibrate():
@@ -542,21 +570,27 @@ leftServo.start(leftMicroseconds/200.0)
 rightServo.start(rightMicroseconds/200.0)
 liftServo.start(servoHeight/200.0)
 
+# If user does not give a number, obtain temperature data from the Internet
 if len(sys.argv) == 1:	
 	weatherGetter = Weather()
 	temp = int(weatherGetter.getWeather())	
 	print(temp)
-
-	drawNum(temp / 10, 20.0, 25.0)
+    # For two digit numbers, divide by ten and throw away the part after the decimal point in order to write the first digit. For single digit numbers, this part will return nothing.
+    drawNum(temp / 10, 20.0, 25.0)
 	linePath(0.0, 25.0)
-	drawNum(temp % 10, 5.0, 25.0)
-	linePath(10.0, 10.0)	
-else: 
+    # For two digit numbers, the remainder after dividing by ten will be the second digit. For single digit numbers, this number will be the original digit.
+    drawNum(temp % 10, 5.0, 25.0)
+	linePath(10.0, 10.0)
+# If the user inputs a number, then write that number
+else:
+    # Make sure user input is treated as an integer
 	num = int(sys.argv[1])
 	print(num)
+    # Single-digit numbers
 	if num < 10:
 		drawNum(num, 20.0, 25.0)
 		linePath(10.0, 10.0)
+    # Two digit numbers
 	else:
 		drawNum(num / 10, 20.0, 25.0)
 		linePath(0.0, 25.0)
