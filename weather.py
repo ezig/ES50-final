@@ -11,7 +11,7 @@ def toFahrenheit(temp):
 class Weather:
 
 	def __init__(self):
-		"""Gets location based on IP address (may be problematic on Harvard network)"""
+		"""Gets location based on IP address (will be problematic if the IP address is private)"""
 
 		try:
 			f = urllib2.urlopen('http://freegeoip.net/json/')
@@ -26,10 +26,12 @@ class Weather:
 			self.location = "Cambridge,MA"
 
 	def getWeather(self):
+		"""Gets the temperature in Kelvin from openweathermap"""
+
 		address = 'http://api.openweathermap.org/data/2.5/weather?q=' + self.location + '&APPID=' + APIKEY
 		f = urllib2.urlopen(address)
 		weatherJSON = f.read()
 		f.close()
 		weather = json.loads(weatherJSON)
-		return round(toFahrenheit(weather['main']['temp']),1)
+		return int(toFahrenheit(weather['main']['temp']))
 	

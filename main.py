@@ -2,8 +2,6 @@ from weather import *
 from time import sleep 
 import RPi.GPIO as GPIO 
 from math import * 
-from multiprocessing import Process
-from random import randint
 import sys
 
 # GPIO pins for servo
@@ -14,23 +12,39 @@ SERVOPINLIFT = 15
 # Lift commands
 UP = 0
 DOWN = 1
-WIPE = 2
 
 # Positions for various leves of lifting
 LEVELWRITE = 1500
 LEVELUP = 2500
-LEVELWIPE = 1750
 
-#LEFTSERVONULL = 500
-#RIGHTSERVONULL = 2500
+# respresents a sweep of 90 degrees (pi/2 rad) for each motor (found by trial and error)
+SERVO90 = 620
 
-SERVOFAKTOR = 620
-
-# angles for the left and right servos
+# angles for which the left and right servos are parallel to the x axis (found by trial and error)
 LEFTSERVONULL = 1900
 RIGHTSERVONULL = 984
+
 # determines speed of the servo, higher is slower
 LIFTSPEED = 1500
+
+# keeps track of location of pen
+currentX = 10.0
+currentY = 10.0
+
+# length of arm closest to servo
+SHORTARMLENGTH = 35.1
+# length of arm connected to pen
+LONGARMLENGTH = 55.2
+
+#half the distance between the two motors 
+SERVODISTANCE = 13.0
+
+
+# origin points of left and right servo 
+LEFTSERVOX = 22
+LEFTSERVOY = -25
+RIGHTSERVOX = 47
+RIGHTSERVOY = -25
 
 GPIO.cleanup()
 
@@ -38,93 +52,21 @@ GPIO.cleanup()
 GPIO.setmode(GPIO.BOARD)
 
 # Set servo pins as output
-GPIO.setup(SERVOPINLEFT,GPIO.OUT)
-GPIO.setup(SERVOPINRIGHT,GPIO.OUT)
-GPIO.setup(SERVOPINLIFT,GPIO.OUT)
+GPIO.setup(SERVOPINLEFT, GPIO.OUT)
+GPIO.setup(SERVOPINRIGHT, GPIO.OUT)
+GPIO.setup(SERVOPINLIFT, GPIO.OUT)
 
 # Set up the pins for PWM at 50 HZ (meaning 20 ms periods)
 leftServo = GPIO.PWM(SERVOPINLEFT, 50)
 rightServo = GPIO.PWM(SERVOPINRIGHT, 50)
 liftServo = GPIO.PWM(SERVOPINLIFT, 50)
 
-# keeps track of location of pen
-# currentX = 75.0
-# currentY = 47.5
-currentX = 10.0
-currentY = 10.0
-
-p = 37
-l = 47
-
-# length of arms
-L1 = 35.0
-L2 = 55.1
-L3 = 13.2
-
-
-# origin points of left and right servo 
-O1X = 22
-O1Y = -25
-O2X = 47
-O2Y = -25
-
-# keeps track of left right servo position
-leftMicroseconds = 1500
-rightMicroseconds = 1500
-
-# Keeps track of the lift position of the pen
-servoHeight = 2000
-
-# For each number, there is a set of angles that needs to be reached by the left and right servos
-# Point A would be at the top of zero and point B would be at the bottom of zero; it would write out 0 in a counter clockwise fashion
-#LEVELLEFT0A = TODO
-#LEVELRIGHT0A = TODO
-#LEvELLEFT0B = TODO
-#LEVELLEFT0B = TODO
-# Point A would be at the bottom of 1 and point B would be at the top of 1; 1 would be written as a straight line
-#LEVELLEFT1A = TODO
-#LEVELRIGHT1A = TODO
-#LEVELLEFT1B = TODO
-#LEVELRIGHT1B = TODO
-
-def wipe():
-	"""gets the eraser and then clears the board"""
-
-	lift(UP)
-
-# given a number as a string (or a decimal point)
 def drawNum(num, x, y):
-	"""Given a digit or . as a string, writes the digit by lifting up the pen,
-	going to the appropriate location, putting the pen down, and then writing"""
+	"""Given a digit as an int, writes the digit by
+	going to the appropriate location, putting the pen down, writing, and then lifting the pen up"""
 	global UP,DOWN, WIPE
-	# if num == '0':
-	# 	lift(UP)
-	# elif num == '1':
-	# 	lift(UP)
 
- #        """The outline for the code in the following seven lines was obtained from StackOverflow: "http://stackoverflow.com/questions/7207309/python-how-can-i-run-python-functions-in-parallel". This method will be used throughout our drawNum function. """
- #        if __name__ == '__main__':
- #            a = Process(target = rightadjust, args = (1,))
- #            a.start()
- #            b = Process(target = leftadjust, args = (1,))
- #            b.start()
- #            a.join()
- #            b.join()
- #        """The above method is called multiprocessing. It should allow us to executie both functions at the same time. Multiprocessing seems to be very important when we actually have to draw the 1. The left and right servos must move together, and at the same rate (taken care of by LIFTSPEED), so that the vertical straight line is drawn"""
- #        lift(DOWN)
- #        if __name__ == '__main__':
- #            a = Process(target = rightwrite, args = (1,))
- #            a.start()
- #            b = Process(target = leftwrite, args = (1,))
- #            b.start()
- #            a.join()
- #            b.join()
-	# elif num == '2':
-	# 	lift(UP)
-    
-    # For each number, any functions between lift(DOWN) and lift(UP) will be written on the platform. At times, the sleep function is called to make turns neat by delaying the pen.
 	if num == 0:
-
 		linePath(x + 1.0, y + 5.0)
 		lift(DOWN)
 		arcPath(x + 1.0, y + 15.0, 7.0, -0.8, 7.6, 'Counterclockwise')
@@ -132,263 +74,107 @@ def drawNum(num, x, y):
 	if num == 1:
 		linePath(x + 0.0, y + 5.0)
 		lift(DOWN)
-        # Move upwards 20 points
 		linePath(x + 0.0, y + 20.0)
 		lift(UP)
 	if num == 2:
 		linePath(x + 0.0, y + 3.0)
 		lift(DOWN)
-        # Make rounded part of 2
 		arcPath(x - 12.0, y + 3.0, 12.0, 6.5, 3, 'Clockwise')
-        # Make the semicircle's last part straight
 		linePath(x + 20.0, y + 25.0)
 		sleep(0.01)
-        # Make base of 2
 		linePath(x - 13.0, y + 20.0)
 		lift(UP)
 	if num == 3:
 		linePath(x + 1.0, y + 5.0)
 		lift(DOWN)
-        # Make upper curve of 3
 		arcPath(x - 7.0, y + 7.0, 7.0, 6.0, 1.0, 'Clockwise')
 		sleep(0.01)
-        # Make lower curve of 3
 		arcPath(x + 1.0, y + 21.0, 7.0, 6.0, 0.0, 'Clockwise')
-		#linePath(x - 4.0, y + 18.0)
 		lift(UP)
 	if num == 4:
 		linePath(x + 1.0, y - 3.0)
 		lift(DOWN)
-        # Make diagonal line of 4
 		linePath(x + 1.0, y + 12.0)
 		sleep(0.01)
-        # Make horizontal line of 4
 		linePath(x - 10.0, y + 12.0)
 		sleep(0.01)
-        # Move upwards to complete the "triangle" in the figure 4
 		linePath(x - 10.0, y - 3.0)
 		sleep(0.01)
-        # Move downwards to make the final "tail" of 4
 		linePath(x - 10.0, y + 19.0)
 		lift(UP)
 	if num == 5:
 		linePath(x + 5.0, y + 0.0)
 		lift(DOWN)
 		sleep(0.5)
-        # Make top horizontal line of 5
 		linePath(x + 15.0, y + 0.0)
 		sleep(0.5)
-        # Make vertical line of 5
 		linePath(x + 15.0, y + 22.0)
 		sleep(0.5)
-        # Make the bottom semicircle of 5
  		arcPath(x + 6.5, y + 20.0, 7.0, 6.0, 0.2, 'Clockwise')
 		lift(UP)
 	if num == 6:
 		linePath(x + 1.0, y - 2.0)
 		lift(DOWN)
-        # The circular base and rounded end of 6 are created because the difference between startAngle and endAngle is more than 6.
 		arcPath(x + 1.0, y + 18.0, 7.0, -0.8, 7.6, 'Counterclockwise')
 		sleep(0.5)
 		lift(UP)
 	if num == 7:
 		linePath(x + 6.0, y - 3.0)
 		lift(DOWN)
-        # Create horizontal line of 7
 		linePath(x - 15.0, y - 3.0)
 		sleep(0.01)
-        # Create diagonal part of 7
 		linePath(x + 6.0, y + 18.0)
 		lift(UP)
 	if num == 8:
 		linePath(x + 3.0, y - 3.0)
 		lift (DOWN)
-        # Create upper circle of 8
 		arcPath(x + 0.0, y + 0.0, 7.0, 4.5, -4.8, 'Clockwise')
 		sleep(0.5)
-        # Create lower circle of 8
 		arcPath(x + 8.0, y + 14.0, 7.0, 4.5, 11.0, 'Counterclockwise')
 		lift(UP)
 	if num == 9:
 		linePath(x + 1.0, y + 3.0)
 		lift(DOWN)
-        # Create upper circle of 9
 		arcPath(x + 1.0, y + 2.0, 9.0, 5.5, -3.0, 'Clockwise')
 		sleep(0.01)
-        # The "tail" of 9 after the circle will be a diagonal line
 		linePath(x -8.0, y + 20.0)
 		lift(UP)
-	"""if num == 0:
-		# linePath(x + 12.0, y + 6.0)
-		lift(0)
-    		arcPath(x + 1.0, y + 45.0, 15.0, -0.8, 6.7, 'Counterclockwise')
-    		lift(1)
-	if num == 1:
-		linePath(x + 0.0, y - 30.0)
-		lift(0)
-		linePath(x + 0.0, y - 20.0)
-		linePath(x + 0.0 , y + 0.0)
-		lift(1)
-	if num == 2:
-		linePath(x + 10.0, y - 30.0)
-		lift(0)
-		arcPath(x + 0.0, y - 30.0, 15.0, 3.0, 0.0, 'Clockwise')
-		arcPath(x + 5.0, y + 30.0, 15.0, 7.0, -0.8, 'Clockwise')
-		linePath(x + 5.0, y - 20.0)
-		linePath(x + 20.0, y - 0.0)
-		linePath(x - 30.0, y + 0.0)
-		lift(1)
-	if num == 3:
-		linePath(x + 2 * scale, by + 17 * scale);
-		lift(0)
-		arcPath(x + 5.0, y + 15.0, 5.0, 3.0, -2.0, 'Clockwise');
-		arcPath(x + 5.0, y + 5.0, 5.0, 1.57, -3.0, 'Clockwise');
-		lift(1)"""
-  # case 4:
-  #   drawTo(bx + 10 * scale, by + 0 * scale);
-  #   lift(0);
-  #   drawTo(bx + 10 * scale, by + 20 * scale);
-  #   drawTo(bx + 2 * scale, by + 6 * scale);
-  #   drawTo(bx + 12 * scale, by + 6 * scale);
-  #   lift(1);
-  #   break;
-  # case 5:
-  #   drawTo(bx + 2 * scale, by + 5 * scale);
-  #   lift(0);
-  #   bogenGZS(bx + 5 * scale, by + 6 * scale, 6 * scale, -2.5, 2, 1);
-  #   drawTo(bx + 5 * scale, by + 20 * scale);
-  #   drawTo(bx + 12 * scale, by + 20 * scale);
-  #   lift(1);
-  #   break;
-  # case 6:
-  #   drawTo(bx + 2 * scale, by + 10 * scale);
-  #   lift(0);
-  #   bogenUZS(bx + 7 * scale, by + 6 * scale, 6 * scale, 2, -4.4, 1);
-  #   drawTo(bx + 11 * scale, by + 20 * scale);
-  #   lift(1);
-  #   break;
-  # case 7:
-  #   drawTo(bx + 2 * scale, by + 20 * scale);
-  #   lift(0);
-  #   drawTo(bx + 12 * scale, by + 20 * scale);
-  #   drawTo(bx + 2 * scale, by + 0);
-  #   lift(1);
-  #   break;
-  # case 8:
-  #   drawTo(bx + 5 * scale, by + 10 * scale);
-  #   lift(0);
-  #   bogenUZS(bx + 5 * scale, by + 15 * scale, 5 * scale, 4.7, -1.6, 1);
-  #   bogenGZS(bx + 5 * scale, by + 5 * scale, 5 * scale, -4.7, 2, 1);
-  #   lift(1);
-  #   break;
-
-  # case 9:
-  #   drawTo(bx + 9 * scale, by + 11 * scale);
-  #   lift(0);
-  #   bogenUZS(bx + 7 * scale, by + 15 * scale, 5 * scale, 4, -0.5, 1);
-  #   drawTo(bx + 5 * scale, by + 0);
-  #   lift(1);
-  #   break;
-
-def getDigits(temp):
-	"""Given the temp as a float, returns an array of the characters
-	representing the digits (and the decimal point)"""
-
-	return list(int(temp))
-# # While the pen is up, move the right servo to the correct starting angle, defined by LEVELRIGHT1a
-# def rightadjust(num):
-#     if num == 1
-#         if rightServo > LEVELRIGHT1A
-#             while rightServo > LEVELRIGHT1A
-#                 rightServo -= 1
-#                 lwriteMicrosceonds(rightServo, rightServo)
-#                 delayMicroseconds(LIFTSPEED)
-#         else if rightServo < LEVELRIGHT1A
-#             while rightServo > LEVELRIGHT1a
-#                 rightServo += 1
-#                 lwriteMicroseconds(rightServo, rightServo)
-#                 delayMicroseconds(LIFTSPEED)
-
-# # After the pen is down, the right servo must move counterclockwise (the angle from the Raspberry Pi perspective is decreasing)
-# def rightwrite(num):
-#     if num == 1
-#         while rightServo > LEVELRIGHT1B
-#             rightServo -= 1
-#             lwriteMicroseconds(rightServo, rightServo)
-#             delayMicroseconds(LIFTSPEED)
-
-# # Move Left servo to the correct starting angle, defined by LEVELRIGHT1a
-# def leftadjust(num):
-#     if num == 1
-#         if leftServo > LEVELLEFT1a
-#             while leftServo > LEVELLEFT1a
-#                 leftServo -= 1
-#                     lwriteMicrosceonds(leftServo, leftServo)
-#                     delayMicroseconds(LIFTSPEED)
-#         else if leftServo < LEVELLEFT1a
-#             while leftServo > LEVELLEFT1a
-#                 leftServo += 1
-#                 lwriteMicroseconds(leftServo, leftServo)
-#                 delayMicroseconds(LIFTSPEED)
-# # When the pen is down, the left servo must move clockwise (Raspberry Pi thinks the angle is increasing)
-# def leftwrite(num):
-#     if num == 1
-#         while leftServo < LEVELLEFT1b
-#             leftServo += 1
-#                 lwriteMicroseconds(leftServo, leftServo)
-#                 delayMicroseconds(LIFTSPEED)
 
 def lift(level):
 	"""Given the level UP, DOWN, or WIPE, raises or lowers the pen
 	to the appropriate point based on the current lift position stored
 	in servoHeight"""
-	global servoHeight, UP, DOWN, WIPE, LIFTSPEED, LEVELUP, LEVELWRITE, LEVELWIPE, liftServo
+	global servoHeight, UP, DOWN, LIFTSPEED, LEVELUP, LEVELWRITE, liftServo
 
-	#start the servo at the current position
-	# (microseconds / 1000 / 20 ms  * 100% = duty cycle)
-    
-    # For each level, add or subtract one until the corect height is reached
-    # LEVELUP means the pen is not touching the surface
+    # change the lift so that the pen is above the surface
 	if level == UP:
+		#pen is too high
 		if servoHeight >= LEVELUP:
 			while servoHeight >= LEVELUP:
 				servoHeight -= 1
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
-
+		#pen is too low
 		else:
 			while servoHeight <= LEVELUP: 
 				servoHeight += 1
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
-    # LEVELDOWN means the pen can write on the surface
+
+    # change the lift so the pen is on the writing surface
 	elif level == DOWN:
+		#pen is too high
 		if servoHeight >= LEVELWRITE:
 			while servoHeight >= LEVELWRITE:
 				servoHeight -= 1
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
-
+		#pen is too low
 		else:
 			while servoHeight <= LEVELWRITE:
 				servoHeight += 1
 				writeMicroseconds(liftServo, servoHeight)
 				delayMicroseconds(LIFTSPEED)
-    # LEVELWIPE means the pen can erase what is written on the surface
-	elif level == WIPE:
-		if servoHeight >= WIPE:
-			while servoHeight >= LEVELWIPE:
-				servoHeight -= 1
-				writeMicroseconds(liftServo, servoHeight)
-				delayMicroseconds(LIFTSPEED)
-
-		else:
-			while servoHeight <= LEVELWIPE:
-				servoHeight += 1
-				writeMicroseconds(liftServo, servoHeight)
-				delayMicroseconds(LIFTSPEED)
-
-	#liftServo.stop()
 
 def linePath(x, y):
 	"""Given a destination x,y, calls goToXY in a loop so that a straight
@@ -407,9 +193,13 @@ def linePath(x, y):
 		goToXY(currentX+dx/steps,currentY+dy/steps)
 		currentX += dx/steps
 		currentY += dy/steps
+		sleep(0.005)
 
-# The angles for the circle range from 0 to 6.
 def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
+	"""Draws a circle of given radius about the given center point
+	from startAngle to endAngle (in rad) in the designated direction 
+	(either 'Clockwise' or 'Counterclockwise') """
+
 	sweptAngle = 0
 
 	if direction == 'Clockwise':
@@ -419,6 +209,7 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 			linePath(centerX + radius * cos(startAngle + sweptAngle),
 				centerY + radius * sin(startAngle + sweptAngle))
 			sweptAngle += increment
+			
 	elif direction == 'Counterclockwise':
 		increment = 0.05
         # Counterclockwise motion decreases the angle
@@ -427,166 +218,87 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 				centerY + radius * sin(startAngle + sweptAngle))
 			sweptAngle += increment
 
-# def goToXY (x, y):
-	 
-# 	"""Assumes global variables p (length of lower robot arm segment) and l (length of upper robot arm segment) and currentX and currentY.
-# 	Takes in x, y coordinates of new destination with origin at the right servo.
-# 	Takes in a, b which are exterior angles of the servo -- a is negative from the horizontal, b is positive from the horizontal.
-# 	Returns the new angles of the servos. (Should newleft be negative of what it is now? Test and see.)
-# 	"""
-# 	global currentX, currentY, leftMicroseconds, rightMicroseconds, LEFTSERVONULL, RIGHTSERVONULL, leftServo, rightServo, p, linePath
-
-
-# 	a = (leftMicroseconds - LEFTSERVONULL) / 1000.0 * pi / 2
-# 	b = (rightMicroseconds - RIGHTSERVONULL) / 1000.0 * pi / 2 
-#  	# Define the x and y distance the robot arms must travel
-#  	dx = x - currentX
-#  	dy = y - currentY
-
-#  	# If you consider l and p as vectors, the vector L1 would be their sum (a.k.a. the shortest path from the position of the left servo to point (currentX, currentY)). 
-#  	# The length L1 is defined using the Law of Cosines. It is defined as a length because Python hates vectors. 
-#  	L1 = sqrt(l**2 + p**2 - 2*l*p*cos(pi/2 + a))
-#  	# t1 is the angle between L1 and the horizontal. 
-#  	# Defined by using the fact that L1*sin(t1) = currentY.
-#  	t1 = asin(currentY / L1)
-#  	# c is the length of the vector that takes you from the old point (currentX, currentY) to the new point (x,y).
-#  	c = sqrt(dx**2 + dy**2)
-#  	# L2 is the length of the shortest path between the position of the left servo and the new point (x,y).
-#  	# Defined as the length of the vector sum of vectors L1 and c.
-#  	L2 = sqrt((L1*cos(t1) + dx)**2 + (L1*sin(t1) + dy)**2)
- 	
-#  	#L3 is the right side equivalent of L1
-#  	L3 = sqrt(l**2 + p**2 - 2*l*p*cos(pi/2 + b))
-#  	# Right side equivalent of t1
-#  	t2 = asin(currentY / L2)
-#  	# Right side equivalent of L2
-#  	L4 = sqrt((L3*cos(t2) + dx)**2 + (L3*sin(t2) + dy)**2)
-
-# 	# Because Python hates vectors, we have hard-coded the dot products that we are going to use.
-# 	L1dotL2 = (L1*cos(t1))*(L1*cos(t1) + dx) + (L1*sin(t1))*(L1*sin(t1) + dy)
-# 	L3dotL4 = L3*cos(t2)*(L3*cos(t2) + dx) + (L3*sin(t2))*(L3*sin(t2) + dy)
-
-#  	# ang1 is the angle between vectors L1 and L2
-#  	# ang2 is the angle between vectors L3 and L4
-#  	# Defined using Law of Cosines, we could alternatively use the dot product.
-#  	val1 = (L1**2 + L2**2 - c**2) / (2*L1dotL2)
-#  	if val1 > 1.0:
-#  		ang1 = 0
-#  	else:
-#  		ang1 = acos((L1**2 + L2**2 - c**2) / (2*L1dotL2))
- 	
-#  	val2 = (L3**2 + L4**2 - c**2) / (2*L3dotL4)
-#  	if val2 > 1.0:
-#  		ang2 = 0
-#  	else:
-# 		ang2 = acos((L3**2 + L4**2 - c**2) / (2*L3dotL4))
-
-#  	# leftf is the angle between p on the left and L2, rightf is the angle between p on the right and L3.
-#  	leftf = acos((p**2 + L2**2 - l**2) / (2*p*L2))
-#  	rightf = acos((p**2 + L4**2 - l**2) / (2*p*L4))
-
-#  	newleft = t1 + ang1 - leftf
-#  	newright = t2 + ang2 - rightf
-
-#  	leftMicroseconds = LEFTSERVONULL + 1000 * newleft/(pi/2)
-#  	rightMicroseconds = RIGHTSERVONULL +1000 * newright/(pi/2)
-
-#  	writeMicroseconds(leftServo, leftMicroseconds)
-#  	writeMicroseconds(rightServo, rightMicroseconds)
-
-def return_angle(a, b, c):
- 	#cosine rule for angle between c and a
- 	x = (a * a + c * c - b * b) / (2 * a * c)
-	# if (x > 1.0):
-	# 	x = 1
-
- 	return acos(x)
-
-def goToXY(Tx, Ty):
- 	#delayMicroseconds(10000)
 	sleep(0.005)
 
- 	global O1X, O1Y, L1, L2, L3, rightServo, leftServo, LEFTSERVONULL, RIGHTSERVONULL 
+def return_angle(a, b, c):
+ 	"""Uses the law of cosinse to find the angle between c and a
+ 	for a triangle with side lengths a, b, c """
+ 	return acos((a * a + c * c - b * b) / (2 * a * c))
 
-	#calculate triangle between pen, servoLeft and arm joint
-  	# cartesian dx/dy
-	dx = Tx - O1X
-	dy = Ty - O1Y
+def goToXY(targetX, targetY):
+	"""Based on the currentX and currentY position, moves the pen to
+	the desired targetX, targetY coordinates"""
+
+ 	global LEFTSERVOX, LEFTSERVOY, SHORTARMLENGTH, LONGARMLENGTH, SERVODISTANCE, rightServo, leftServo, LEFTSERVONULL, RIGHTSERVONULL 
+
+	#calculate triangle between pen, left servo and arm joint
+	dx = targetX - LEFTSERVOX
+	dy = targetY - LEFTSERVOY
 
     #polar lemgth (c) and angle (a1)
+    # get distance between start and end point
 	c = sqrt(dx * dx + dy * dy) 
 	a1 = atan2(dy, dx)
-	a2 = return_angle(L1, L2, c)
+	a2 = return_angle(SHORTARMLENGTH, LONGARMLENGTH, c)
 
-	writeMicroseconds(leftServo, floor(((a2 + a1 - pi) * SERVOFAKTOR) + LEFTSERVONULL))
+	writeMicroseconds(leftServo, floor(((a2 + a1 - pi) * SERVO90) + LEFTSERVONULL))
 
-	#calculate joinr arm point for triangle of the right servo arm
-	a2 = return_angle(L2, L1, c);
-	Hx = Tx + L3 * cos((a1 - a2 + 0.621) + pi) #36,5
-	Hy = Ty + L3 * sin((a1 - a2 + 0.621) + pi)
+	#calculate the triangle for the right servo arm
+	a2 = return_angle(LONGARMLENGTH, SHORTARMLENGTH, c);
+	rightX = targetX + SERVODISTANCE * cos((a1 - a2 + 0.621) + pi)
+	rightY = targetY + SERVODISTANCE * sin((a1 - a2 + 0.621) + pi)
 
 	#calculate triangle between pen joint, servoRight and arm joint
-	dx = Hx - O2X
-	dy = Hy - O2Y
+	dx = rightX - RIGHTSERVOX
+	dy = rightY - RIGHTSERVOY
 
 	c = sqrt(dx * dx + dy * dy)
 	a1 = atan2(dy, dx)
-	a2 = return_angle(L1, (L2 - L3), c)
+	a2 = return_angle(SHORTARMLENGTH, (LONGARMLENGTH - SERVODISTANCE), c)
 
-	writeMicroseconds(rightServo, floor(((a1 - a2) * SERVOFAKTOR) + RIGHTSERVONULL))
+	writeMicroseconds(rightServo, floor(((a1 - a2) * SERVO90) + RIGHTSERVONULL))
 
 def writeMicroseconds(servo, microseconds):
-	"""Calculates duty cycle based on desired pulse width"""
+	"""Calculates duty cycle based on desired pulse width
+	(emulates the way that arduino handles servo control)"""
+
 	servo.ChangeDutyCycle(microseconds/200.0)
 
 def delayMicroseconds(microseconds):
-	"""Converts microseconds delay to seconds delay"""
+	"""Converts microseconds delay to seconds delay
+	 (emulates arduino function)"""
+
 	sleep(microseconds/1000000.0)
 
-def calibrate():
-	linePath(-3, 29.2)
-  	sleep(0.5)
-  	linePath(74.1, 28)
-  	sleep(0.5)
-# while (1):
-# 	weatherGetter = Weather()
-# 	temp = weatherGetter.getWeather()
-# 	digits = getDigist(temp)
-# 	print(digits)
-# 	for i in range(1,len(digits)):
-# 		drawNum(digits[i])
-# 	break;
-
-#test code
-# for i in range(0,10):
-# 	liftServo.start(500/200.0)
-# 	lift(UP)
-# 	sleep(1)
-# 	lift(WIPE)
-# 	sleep(1)
-# 	lift(DOWN)
-# 	sleep(1)
-leftServo.start(leftMicroseconds/200.0)
-rightServo.start(rightMicroseconds/200.0)
+# start the servos in a "neutral" position
+leftServo.start(1500.0/200.0)
+rightServo.start(1500.0/200.0)
 liftServo.start(servoHeight/200.0)
 
-# If user does not give a number, obtain temperature data from the Internet
+# if user does not give a number, get the temperature
 if len(sys.argv) == 1:	
 	weatherGetter = Weather()
-	temp = int(weatherGetter.getWeather())	
+	
+	# get the temperature from weather object
+	temp = weatherGetter.getWeather())	
 	print(temp)
-    # For two digit numbers, divide by ten and throw away the part after the decimal point in order to write the first digit. For single digit numbers, this part will return nothing.
+
+	# print the tens digit
     drawNum(temp / 10, 20.0, 25.0)
+    # move over to write the next digit
 	linePath(0.0, 25.0)
-    # For two digit numbers, the remainder after dividing by ten will be the second digit. For single digit numbers, this number will be the original digit.
+    # draw the ones digit
     drawNum(temp % 10, 5.0, 25.0)
+
+    # move back to the start point for the next run
 	linePath(10.0, 10.0)
+
 # If the user inputs a number, then write that number
 else:
-    # Make sure user input is treated as an integer
 	num = int(sys.argv[1])
+
 	print(num)
-    # Single-digit numbers
+    # Single-digit number
 	if num < 10:
 		drawNum(num, 20.0, 25.0)
 		linePath(10.0, 10.0)
@@ -597,31 +309,9 @@ else:
 		drawNum(num % 10, 5.0, 25.0)
 		linePath(10.0, 10.0)
 
-#sleep(1)
-#linePath(5, 5);
-# linePath(25.0,25.0)
-# arcPath(32.0, 30.0, 10.0, -0.8, 6.7 , 'Counterclockwise')
-#calibrate()
-#lift(UP)
-
-#drawNum(temp / 10, 20.0, 25.0)
-#linePath(0.0, 25.0)
-#drawNum(temp % 10, 5.0, 25.0)
-#linePath(10.0, 10.0)
-# drawNum(19,25, 1)
-# drawNum(19,25,2)
-
-"""for i in range (0, 1000):
-	writeMicroseconds(leftServo, 1500-i)
-	writeMicroseconds(rightServo, 1500+i)
-	sleep(0.001)
-
-for i in range (0, 1000):
-	writeMicroseconds(leftServo, 500+i)
-	writeMicroseconds(rightServo, 2500-i)
-	sleep(0.001)"""
-
-#leftServo.stop()
-#rightServo.stop()
+# cleanup
+leftServo.stop()
+rightServo.stop()
+liftServo.stop()
 
 GPIO.cleanup()
