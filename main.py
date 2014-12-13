@@ -204,19 +204,20 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
     # For the clockwise direction, 0 is on the left side, pi/2 is at the top, pi is on the right, and 3pi/2 is at the bottom
 	if direction == 'Clockwise':
 		increment = -0.05 # how far to go each step
-        # Clockwise motion increases the angle.
+
 		while startAngle + sweptAngle > endAngle:
-        # The actual number we give the start angle is more than the actual number for the end angle. The servos will move over the difference between those two angles in the clockwise direction
+        # start angle is more than the the end angle.
+        #The servos will move over the difference between those two angles in the clockwise direction
             linePath(centerX + radius * cos(startAngle + sweptAngle),
 				centerY + radius * sin(startAngle + sweptAngle))
 			sweptAngle += increment
 			
+    # For the counterclockwise direction, 0 is on the right side, pi/2 is at the top, pi is on the left, and 3pi/2 is at the bottom
 	elif direction == 'Counterclockwise':
 		increment = 0.05
-        # Counterclockwise motion also increases the angle
-        # For the counterclockwise direction, 0 is on the right side, pi/2 is at the top, pi is on the left, and 3pi/2 is at the bottom
+
         while startAngle + sweptAngle < endAngle:
-            # The actual number for the start angle is less than the number for the end angle. Only the difference between those two values matters
+        # The start angle is less than the end angle. Only the difference between those two values matters
 			linePath(centerX + radius * cos(startAngle + sweptAngle), 
 				centerY + radius * sin(startAngle + sweptAngle))
 			sweptAngle += increment
@@ -234,30 +235,36 @@ def goToXY(targetX, targetY):
 
  	global LEFTSERVOX, LEFTSERVOY, SHORTARMLENGTH, LONGARMLENGTH, SERVODISTANCE, rightServo, leftServo, LEFTSERVONULL, RIGHTSERVONULL 
 
-	#calculate triangle between pen, left servo and arm joint
+	# calculate components of the vector between the (currentX, currentY) point and the (targetX, targetY) point
 	dx = targetX - LEFTSERVOX
 	dy = targetY - LEFTSERVOY
 
-    #polar lemgth (c) and angle (a1)
-    # get distance between start and end point
-	c = sqrt(dx * dx + dy * dy) 
+    # for the left servo, length of the vector between the current and target point is hypleft
+    # angle a1 is the angle this vector makes with the horizontal
+    # angle a2 is the interior angle where the SHORTARMLENGTH and hypleft are joined
+   	hypleft = sqrt(dx * dx + dy * dy) 
 	a1 = atan2(dy, dx)
-	a2 = return_angle(SHORTARMLENGTH, LONGARMLENGTH, c)
+	a2 = return_angle(SHORTARMLENGTH, LONGARMLENGTH, hypleft)
 
 	writeMicroseconds(leftServo, floor(((a2 + a1 - pi) * SERVO90) + LEFTSERVONULL))
 
-	#calculate the triangle for the right servo arm
-	a2 = return_angle(LONGARMLENGTH, SHORTARMLENGTH, c);
+	# reassign a2 to the angle where the LONGARMLENGTH and hypleft are joined
+	a2 = return_angle(LONGARMLENGTH, SHORTARMLENGTH, hypleft);
 	rightX = targetX + SERVODISTANCE * cos((a1 - a2 + 0.621) + pi)
 	rightY = targetY + SERVODISTANCE * sin((a1 - a2 + 0.621) + pi)
 
-	#calculate triangle between pen joint, servoRight and arm joint
+	# calculate the components of the vector between the (currentX, currentY) point and the (targetX, targetY) point for the right servo
 	dx = rightX - RIGHTSERVOX
 	dy = rightY - RIGHTSERVOY
 
-	c = sqrt(dx * dx + dy * dy)
+	# for the right servo, length of the vector between the current and target point is hypright
+	# angle a1 is the angle this vector makes with the horizontal
+	# angle a2 is the interior angle where the SHORTARMLENGTH and hypright are joined
+	# notice that we must subtract the SERVODISTANCE from the LONGARMLENGTH here because we're using a coordinate system that is more
+	# native to the left servo
+	hypright = sqrt(dx * dx + dy * dy)
 	a1 = atan2(dy, dx)
-	a2 = return_angle(SHORTARMLENGTH, (LONGARMLENGTH - SERVODISTANCE), c)
+	a2 = return_angle(SHORTARMLENGTH, (LONGARMLENGTH - SERVODISTANCE), hypright)
 
 	writeMicroseconds(rightServo, floor(((a1 - a2) * SERVO90) + RIGHTSERVONULL))
 
