@@ -201,20 +201,22 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 	(either 'Clockwise' or 'Counterclockwise') """
 
 	sweptAngle = 0
-    # For the clockwise direction, point 0 is on the left side, point 1.5 is at the top, point 3 is on the right, and point 6 is at the bottom
+    # For the clockwise direction, 0 is on the left side, pi/2 is at the top, pi is on the right, and 3pi/2 is at the bottom
 	if direction == 'Clockwise':
 		increment = -0.05 # how far to go each step
-        # Clockwise motion increases the angle
+        # Clockwise motion increases the angle.
 		while startAngle + sweptAngle > endAngle:
-			linePath(centerX + radius * cos(startAngle + sweptAngle),
+        # The actual number we give the start angle is more than the actual number for the end angle. The servos will move over the difference between those two angles in the clockwise direction
+            linePath(centerX + radius * cos(startAngle + sweptAngle),
 				centerY + radius * sin(startAngle + sweptAngle))
 			sweptAngle += increment
 			
 	elif direction == 'Counterclockwise':
 		increment = 0.05
         # Counterclockwise motion also increases the angle
-        # For the counterclockwise direction, point 0 is on the right side, point 1.5 is at the top, point 3 is on the left, and point 6 is at the bottom
+        # For the counterclockwise direction, 0 is on the right side, pi/2 is at the top, pi is on the left, and 3pi/2 is at the bottom
         while startAngle + sweptAngle < endAngle:
+            # The actual number for the start angle is less than the number for the end angle. Only the difference between those two values matters
 			linePath(centerX + radius * cos(startAngle + sweptAngle), 
 				centerY + radius * sin(startAngle + sweptAngle))
 			sweptAngle += increment
