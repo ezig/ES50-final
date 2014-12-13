@@ -201,7 +201,7 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 	(either 'Clockwise' or 'Counterclockwise') """
 
 	sweptAngle = 0
-
+    # For the clockwise direction, point 0 is on the left side, point 1.5 is at the top, point 3 is on the right, and point 6 is at the bottom
 	if direction == 'Clockwise':
 		increment = -0.05 # how far to go each step
         # Clockwise motion increases the angle
@@ -212,8 +212,9 @@ def arcPath(centerX, centerY, radius, startAngle, endAngle, direction):
 			
 	elif direction == 'Counterclockwise':
 		increment = 0.05
-        # Counterclockwise motion decreases the angle
-		while startAngle + sweptAngle < endAngle:
+        # Counterclockwise motion also increases the angle
+        # For the counterclockwise direction, point 0 is on the right side, point 1.5 is at the top, point 3 is on the left, and point 6 is at the bottom
+        while startAngle + sweptAngle < endAngle:
 			linePath(centerX + radius * cos(startAngle + sweptAngle), 
 				centerY + radius * sin(startAngle + sweptAngle))
 			sweptAngle += increment
