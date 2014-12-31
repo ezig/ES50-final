@@ -1,5 +1,3 @@
-APIKEY = "83215ca074d35d0adc3c85fcd2062946"
-
 import json
 import urllib2
 
@@ -28,7 +26,7 @@ class Weather:
 	def getWeather(self):
 		"""Gets the temperature in Kelvin from openweathermap"""
 
-		address = 'http://api.openweathermap.org/data/2.5/weather?q=' + self.location + '&APPID=' + APIKEY
+		address = 'http://api.openweathermap.org/data/2.5/weather?q=' + self.location
 		f = urllib2.urlopen(address)
 		weatherJSON = f.read()
 		f.close()
